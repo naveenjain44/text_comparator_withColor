@@ -1,0 +1,34 @@
+{
+  "summary": "First-finish smoke pass for UAT Text Comparator. Backend endpoints (/api/, /api/glossary GET+POST, /api/compare happy path + missing-field 422 + unsupported .txt 400, /api/export/pdf, /api/batch matched+unmatched, /api/export/csv) all behave correctly. Frontend navigation, Compare flow (upload docx+eml -> diff report with all sections -> PDF download), Glossary flow (add/save/remove/save), and Batch flow (4 files -> 2 rows -> CSV download) all work end-to-end via public URL. Glossary was restored to original after tests.",
+  "tested_scope": ["frontend", "backend", "integration"],
+  "passed": [
+    "GET /api/ -> {app,status:ok}",
+    "GET /api/glossary returns default 2 rules",
+    "POST /api/glossary saves new rule and GET reflects it; restored to originals",
+    "POST /api/compare (docx+eml) -> full report: subject/greeting/cta/footer/body/links/images + summary(score_percent=77.8, match=7, warning=0, mismatch=2, overall=mismatch)",
+    "POST /api/compare missing 'output' -> 422",
+    "POST /api/compare with foo.txt -> 400 'Unsupported output file type'",
+    "POST /api/export/pdf with {report:...} -> 200 application/pdf, %PDF-1.4",
+    "POST /api/batch with ZIP (2 pairs) -> reports=2, csv_rows=2, unmatched empty",
+    "POST /api/batch with only.docx + lonely.eml -> unmatched.mockups_without_output=['only.docx'], outputs_without_mockup=['lonely.eml']",
+    "POST /api/export/csv -> 200 text/csv with header + row",
+    "Frontend nav-compare/nav-batch/nav-glossary/nav-guide render corresponding *-page components (sidebar visible)",
+    "Compare page: diff-report shows summary-score/match/warning/mismatch and diff-subject/greeting/cta/footer/body-0/link-0/image-0; export-pdf-btn downloads uat_report.pdf",
+    "Glossary page: add-rule-btn adds row (2->3), fill+save-glossary-btn succeeds, remove+save restores",
+    "Batch page: uploading 4 files runs batch, batch-results table with 2 rows, export-csv-btn downloads uat_batch_summary.csv"
+  ],
+  "failed": [
+    {
+      "area": "frontend/compare",
+      "issue": "Sonner success toast overlays the export-pdf-btn briefly after run-compare succeeds; a normal click within ~4s is intercepted by the toast element (subtree intercepts pointer events). Works after toast auto-dismisses (~5s) or with force=true.",
+      "evidence": "Playwright click on [data-testid=export-pdf-btn] timed out with 'toast group-[.toaster] ... subtree intercepts pointer events'. Retry after 5s wait + force=true succeeded and downloaded uat_report.pdf.",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Optional UX polish: shorten the 'compare succeeded' toast duration, or ensure the toaster container has pointer-events:none on non-interactive area so it never intercepts clicks on primary action buttons like Export PDF."
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100% (core flows), 1 low-severity toast overlay observation"},
+  "retest_needed": false,
+  "full_testing_deferred": true
+}

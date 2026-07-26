@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "original": "Hi",
+      "variation": "Hey"
+    },
+    {
+      "original": "Hi",
+      "variation": "Hello"
+    }
+  ]
+}

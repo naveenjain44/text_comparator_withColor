@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+    background: #0A0A0B;
+    color: #fafafa;
+    font-family:
+        "Inter", "IBM Plex Sans", system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.font-mono,
+code,
+pre {
+    font-family:
+        "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular,
+        Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+@layer base {
+    :root {
+        --background: 240 6% 4%;
+        --foreground: 0 0% 98%;
+        --card: 240 5% 8%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 5% 8%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 6% 10%;
+        --secondary: 240 4% 12%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 4% 14%;
+        --muted-foreground: 240 5% 65%;
+        --accent: 240 4% 14%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 72% 51%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5% 16%;
+        --input: 240 5% 16%;
+        --ring: 0 0% 83%;
+        --radius: 0.5rem;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
+}
+
+/* Custom scrollbar for dark UI */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #0a0a0b;
+}
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
+}
+
+/* Long URL word-break */
+.break-anywhere {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}

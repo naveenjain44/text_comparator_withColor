@@ -1,0 +1,85 @@
+{
+  "theme_strategy": "ARCHETYPE 4: SWISS & HIGH-CONTRAST (Dark Mode Priority for QA Dashboard)",
+  "typography": {
+    "headings_font": "Chivo, or IBM Plex Sans (Offline fallback to system-ui)",
+    "body_font": "Inter (Offline fallback to system-ui)",
+    "mono_font": "JetBrains Mono, or IBM Plex Mono (Offline fallback to ui-monospace)",
+    "h1": "text-3xl sm:text-4xl font-bold tracking-tight text-white",
+    "h2": "text-2xl font-semibold tracking-tight text-white",
+    "h3": "text-lg sm:text-xl font-medium tracking-tight text-zinc-200",
+    "body": "text-sm text-zinc-300 leading-relaxed text-left",
+    "mono_text": "text-xs font-mono text-zinc-300"
+  },
+  "colors": {
+    "background": "#0A0A0B (Deep Obsidian)",
+    "surface_main": "#141416 (Elevated Panel Surface)",
+    "surface_secondary": "#18181B (Zinc-900)",
+    "border": "#27272A (Zinc-800)",
+    "text_primary": "#FFFFFF",
+    "text_secondary": "#A1A1AA",
+    "accents": {
+      "match": "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+      "mismatch": "bg-rose-500/15 text-rose-400 border-rose-500/30",
+      "warning": "bg-amber-500/15 text-amber-400 border-amber-500/30",
+      "primary_cta": "bg-white text-black hover:bg-zinc-200"
+    }
+  },
+  "visual_enhancers": {
+    "surfaces": "Grid Borders (The 'Technical' Look). Expose the skeleton. Use `border-collapse` style layout with subtle `border-zinc-800` borders dividing sections.",
+    "shadows": "Minimal. Rely on 1px borders to separate surfaces. Flat solid backgrounds to prevent data distortion (No glassmorphism).",
+    "hover_states": "Slight brightness increase. `hover:bg-zinc-800/50` for interactive rows. Explicit text color definitions on hover."
+  },
+  "grids": {
+    "bento_grid": "MODE B: High Density Grid. Compact spacing (`gap-4` to `gap-6`). Every pixel must be utilized. No jagged bottoms."
+  },
+  "layouts": {
+    "global": "Sidebar on left (w-64, fixed) for navigation and batch overview. Main content area (flex-1) with sticky header (z-50) for Context/Action (Export PDF, Actions).",
+    "diff_view": "2-column High Density Grid (`grid-cols-1 lg:grid-cols-2`). Left: DOCX Mockup Source, Right: EML/MSG Output. Use subgrid or exact fixed widths for side-by-side exact alignment.",
+    "spacing": "Dense Spacing Strategy (`p-4` or `p-6` inside panels). Generous spacing only on the outer dashboard shell."
+  },
+  "component_name": {
+    "DiffRow": "Custom component showing side-by-side text with inline mismatch highlights. Wrap additions/deletions in semantic accent colors.",
+    "GlossaryEditor": "Data table via Shadcn. Inline editable cells for 'Original' and 'Variation'.",
+    "UploadZone": "Dashed border drop zone. `border-2 border-dashed border-zinc-700 hover:border-zinc-500 bg-zinc-900/50`. SVG icon centered.",
+    "StatusBadge": "Small rounded pill showing Match/Mismatch/Warning state using the accent palette."
+  },
+  "motion": {
+    "interactions": "Instant or very fast (`duration-150`). Code reviewers hate slow animations. Staggered fade-ins for list items only.",
+    "transitions": "Use specific properties `transition-colors`, `transition-opacity` (NOT `transition-all`)."
+  },
+  "accessibility": {
+    "contrast": "Ensure text contrast on diff highlights passes APCA (WCAG AA min 4.5:1). Dark mode accents must be bright enough (`-400` tailwind colors).",
+    "focus": "High visibility focus rings: `focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0A0B]`.",
+    "data_testid_rules": "All interactive and key informational elements MUST include `data-testid` attribute (e.g., `data-testid=\"upload-docx-button\"`)."
+  },
+  "media": {
+    "offline_support_note": "CRITICAL: The app must run OFFLINE. DO NOT use external image URLs (e.g., Unsplash). Use local SVG icons. Font imports should fallback to standard system fonts (system-ui, ui-monospace) if offline.",
+    "icons": "lucide-react for all dashboard iconography."
+  },
+  "3d_libraries": {
+    "usage": "None. Keep the interface 2D, dense, and hyper-functional. 3D is distracting for QA."
+  },
+  "image_urls": [],
+  "instructions_to_main_agent": [
+    "Prioritize data clarity and side-by-side alignment in the Diff Viewer.",
+    "Implement the 'Technical Look' with grid borders and flat UI. Avoid generic Vercel gradients.",
+    "Ensure 'Batch Upload' accepts both folders and ZIPs visually with distinct icons.",
+    "Include export buttons (PDF, CSV) prominently in the top right of the sticky header.",
+    "Make the Glossary variations editable via Shadcn inputs.",
+    "Ensure the Diff highlights wrap text securely and break long URLs to prevent layout shifts.",
+    "Do NOT build a Datepicker or Dialog from scratch. Use Shadcn components and customize their CSS."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts. Left-align dense content.",
+    "Create depth through 1px crisp borders and z-index hierarchy, NOT heavy soft shadows.",
+    "MUST NOT apply universal transition. Eg: transition: all.",
+    "MUST NOT center align the app container (.App { text-align: center; }).",
+    "NEVER use emoji characters for icons. Use lucide-react.",
+    "Every interaction needs micro-animations - hover states, selection states.",
+    "Use sonner for toasts notifications.",
+    "ALL interactive elements MUST have `data-testid` attribute.",
+    "DO NOT use complete `transparent` background in header, overlays, any surface that has content under it."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "summary": "Iteration 4 narrow bug-fix verification (hardcoded localhost error string + proactive health check). Backend regression: 23/23 pytest tests pass and preview /api/ returns 200 {status:ok, offline:true, app:'UAT Text Comparator'}. Frontend: static check of lib/api.js confirmed BACKEND_URL export, pingBackend(), friendlyError() and the 4-tier detectBackendUrl(). Happy path on preview URL works (tos_v2.docx + tos_v2.eml -> diff-report, 9 body segments, score 90.00%, no banner, no error toast). Backend-down simulated via page.route abort: backend-down-banner appears <6s showing 'Backend unreachable' + actual preview URL (no localhost misreference); Retry while blocked keeps banner; after unblocking, Retry clears banner <3s; Run Comparison while down toasts 'Cannot reach backend at https://docx-eml-matcher.preview.emergentagent.com — make sure the backend is running (start it and click Retry).' localStorage.backendUrl override to http://127.0.0.1:9999 correctly surfaces in the banner and clears after removal. All requested scenarios PASS.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "Glossary load/save error handling", "issue": "Review request claims Glossary toasts adopt friendlyError(), but Glossary.jsx still uses generic strings ('Failed to load glossary', 'Save failed') and HistorySidebar uses 'Could not remove'. These do not reference the backend URL when the backend is down (no localhost bug, but inconsistent UX with Compare/Batch).", "affected_selectors": []}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": ["Optional: adopt friendlyError(e) in Glossary.jsx (load/save) and HistorySidebar.jsx delete for consistent, URL-accurate error messages."],
+  "critical_code_review_comments": [
+    "friendlyError() only special-cases e.code === 'ERR_NETWORK'; timeouts (ECONNABORTED) fall through to axios' generic 'timeout of 60000ms exceeded' with no backend URL context. Consider handling ECONNABORTED too.",
+    "Compare.jsx sets backendOk=false only on ERR_NETWORK; a backend returning 5xx keeps the banner hidden (acceptable, but health state can go stale since pingBackend only runs on mount/Retry)."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "Comparison history entries created on preview backend via tos_v2.docx/tos_v2.eml runs (existing sample files, no new data files).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Backend-down simulation pattern that works: page.route('**/api/**', handler) with route.abort('failed') and a mutable flag so the same handler can later continue_() requests; sonner error toasts auto-dismiss in ~4s so poll [data-sonner-toast] in 250ms increments instead of a single long wait. Note [data-testid^='diff-body-'] over-matches (also hits -placement/-badge children) — use the '9 segments' label or an exact-index loop to count body rows.",
+  "rca_of_the_issue": "Original bug: Compare.jsx hardcoded the string 'Cannot reach backend at http://localhost:8001' in its catch block, so preview users saw a wrong URL. Fix centralizes URL detection in lib/api.js (BACKEND_URL) and derives all messages from it via friendlyError(); verified the rendered banner and toast now interpolate the actual detected URL, including the localStorage override case."
+}

@@ -1,0 +1,31 @@
+{
+  "summary": "Iteration 2 full-stack validation of the UAT Text Comparator enhancements: weighted per-section scoring, strikethrough exclusion, SQLite history + PDF/HTML export, PRD .docx download, batch ZIP scoring fields, new Compare UI (score cards, result sub-tabs, history sidebar) and localhost backend auto-detect. Backend: created /app/backend/tests/backend_test.py (pytest, 14 tests) — 14/14 PASSED. Frontend: Playwright e2e on the public preview URL covering header nav, upload, compare run, score cards, all 6 result sub-tabs, PDF/HTML export downloads, history sidebar (select/anchors), Guide+PRD link, Glossary and Batch nav — all passed. Only one minor UI/UX defect found (toast overlaps header nav).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "App.js Toaster (sonner)", "issue": "Toaster is position='top-right' with duration 2500ms and renders directly on top of the header nav tabs (Compare/Batch/Glossary/Guide), visually obscuring them and intercepting clicks for ~2.5s after each comparison. Recommend position='bottom-right' or adding top offset below the 56px header.", "selector": "[data-testid=app-nav] / [data-sonner-toaster]", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "History sidebar", "issues": ["PDF/HTML/Delete action row uses opacity-0 group-hover:opacity-100 — actions are invisible (and keyboard-focusable but unseen) until mouse hover; not discoverable on touch devices. Consider opacity-60 default or focus-visible:opacity-100."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Move sonner Toaster away from top-right (or offset below header) so it does not cover the nav tabs."
+  ],
+  "critical_code_review_comments": [
+    "server.py: @app.on_event('startup') is deprecated in current FastAPI/Starlette — migrate to the lifespan context manager to avoid future breakage.",
+    "comparator.py is 715 lines — above the 700-line guideline; consider splitting parsing (docx/eml) from scoring/diff logic.",
+    "/api/batch swallows per-pair exceptions into {'error': ...} entries but /api/export/csv would then fail on heterogeneous keys; consider normalising error rows into csv_rows too.",
+    "history_store.add() is called synchronously inside async endpoints (sqlite3 blocking I/O on the event loop). Fine at current scale but should be wrapped in run_in_threadpool for larger batches."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "Comparison history rows created from /app/backend/samples/tos_update.docx + .eml (pytest-created rows are deleted in session teardown; the UI run left 1 history entry). Glossary page test added one blank unsaved rule (not persisted).",
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_self_test": true,
+  "test_credentials": "None required — app is fully offline/unauthenticated. /app/memory/test_credentials.md not needed.",
+  "context_for_next_testing_agent": "Backend regression suite lives at /app/backend/tests/backend_test.py (run: cd /app/backend && python -m pytest tests/backend_test.py -v). It covers health, compare shape, strikethrough exclusion in both smart and strict modes, link/image stats, 400 on bad docx, history list/get/pdf/html/delete/404, PRD docx (>20KB, PK header), export html/pdf, and batch ZIP with 2 pairs. Verified values for the tos_update sample pair: overall 90.00% (warning), subject 100%, body 100.00% (4 segments), URLs 1/1, Images 0/1 (mockup image has no filename -> mismatch, expected). STATIC CHECK PASSED: /app/frontend/src/lib/api.js detectBackendUrl() returns http://localhost:8001 for localhost/127.0.0.1/0.0.0.0 and falls back to REACT_APP_BACKEND_URL otherwise. Not covered: Batch page UI upload flow (only nav verified) and glossary save persistence round-trip via UI.",
+  "rca_of_the_issue": "No functional defects found. The single UI issue is a layout/z-order concern: <Toaster position=\"top-right\"> in App.js renders in the same top-right region as the fixed header nav in Layout.jsx, so success toasts (2.5s) overlay the Compare/Batch/Glossary/Guide links."
+}

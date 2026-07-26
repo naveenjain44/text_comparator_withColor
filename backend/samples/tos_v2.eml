@@ -1,0 +1,48 @@
+Subject: We're updating our Terms of Service
+From: noreply@google.com
+To: user@example.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============7396798706595923483=="
+
+--===============7396798706595923483==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+plain fallback
+
+--===============7396798706595923483==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+
+<html><body>
+  <p>Hi there,</p>
+  <p>Every couple of years, we update our Terms of Service. We wanted to let =
+you know ahead of time that the next update will be on July 30, 2026.</p>
+  <p>These changes won't affect the way you use our services, but they should=
+ help make it easier for you to understand what to expect from Google &mdash;=
+ and what we expect from you &mdash; as you use our services.</p>
+  <p>You can review the new terms here. If you're based in the European Econo=
+mic Area (EEA) or Switzerland, we've also provided a summary of the key chang=
+es to the EEA version of our terms.</p>
+  <p>At a glance, here's what this update means for you:</p>
+  <ul><li>In general:</li></ul>
+  <p>We added a section to help you better understand why our services may ac=
+cess the internet when not actively engaged, to encourage you to check your I=
+nternet service plan and your device and network settings, as each of those m=
+ay affect your costs.</p>
+  <p>We updated and clarified our Settling disputes, governing law, and court=
+s section.</p>
+  <p>Thank you for using Google services!</p>
+  <p>We make it clearer how various sections in our terms relate to each othe=
+r.</p>
+  <p><a href=3D"https://policies.google.com/terms">Review the new terms</a></=
+p>
+  <p><img src=3D"https://cdn.google.com/logo.png" alt=3D"Google Logo"/></p>
+  <p>Unsubscribe | Privacy Policy | &copy; 2026 Google LLC &middot; 1600 Amph=
+itheatre Pkwy</p>
+</body></html>
+
+--===============7396798706595923483==--
