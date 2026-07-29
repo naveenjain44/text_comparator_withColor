@@ -16,7 +16,8 @@ from fastapi.responses import StreamingResponse, FileResponse, HTMLResponse
 from pydantic import BaseModel
 from starlette.middleware.cors import CORSMiddleware
 
-from comparator import parse_mockup, parse_output, compare, ParsedEmail
+from comparator import compare, ParsedEmail
+from parsers import parse_document, SUPPORTED_EXT
 from pdf_report import generate_pdf
 from html_report import generate_html
 import history as history_store
@@ -82,14 +83,19 @@ def _pair_files(mockup: UploadFile, output: UploadFile):
     m_bytes = mockup.file.read()
     o_bytes = output.file.read()
     try:
-        parsed_mockup = parse_mockup(mockup.filename or "mockup.docx", m_bytes)
+        parsed_mockup = parse_document(mockup.filename or "mockup", m_bytes)
     except Exception as e:
         raise HTTPException(400, f"Failed to parse mockup ({mockup.filename}): {e}")
     try:
-        parsed_output = parse_output(output.filename or "output.eml", o_bytes)
+        parsed_output = parse_document(output.filename or "output", o_bytes)
     except Exception as e:
         raise HTTPException(400, f"Failed to parse output ({output.filename}): {e}")
     return parsed_mockup, parsed_output
+
+
+@api.get("/supported")
+def supported_types():
+    return {"extensions": sorted(SUPPORTED_EXT)}
 
 
 @api.post("/compare")
@@ -172,11 +178,15 @@ async def batch_compare(
     output_files: dict[str, tuple[str, bytes]] = {}
 
     def _add_file(name: str, data: bytes):
-        low = name.lower()
+        low = (name or "").lower()
         stem = Path(name).stem
-        if low.endswith(".docx"):
+        ext = Path(name).suffix.lower()
+        # any supported extension can be mockup OR output — heuristic:
+        # first file with a given stem = mockup, second = output. But most
+        # common case is "docx == mockup, eml/msg == output".
+        if ext == ".docx" or (ext in SUPPORTED_EXT and stem not in docx_files and stem not in output_files):
             docx_files[stem] = data
-        elif low.endswith(".eml") or low.endswith(".msg"):
+        elif ext in SUPPORTED_EXT:
             output_files[stem] = (name, data)
 
     for f in files:
@@ -206,8 +216,8 @@ async def batch_compare(
             unmatched["mockups_without_output"].append(f"{stem}.docx")
             continue
         try:
-            pm = parse_mockup(f"{stem}.docx", docx_bytes)
-            po = parse_output(out[0], out[1])
+            pm = parse_document(f"{stem}.docx", docx_bytes)
+            po = parse_document(out[0], out[1])
             rep = compare(pm, po, glossary, mode=mode, use_glossary=use_glossary)
             rep["mockup_filename"] = f"{stem}.docx"
             rep["output_filename"] = out[0]
@@ -317,6 +327,31 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# ---------- Static frontend (for one-click bundle) ----------
+# When a compiled React build exists at ../frontend/build, serve it so the
+# whole app runs from a single FastAPI process (needed for PyInstaller).
+_FRONTEND_BUILD = ROOT_DIR.parent / "frontend" / "build"
+if _FRONTEND_BUILD.exists():
+    from fastapi.staticfiles import StaticFiles
+    from fastapi.responses import FileResponse as _FR
+
+    app.mount(
+        "/static",
+        StaticFiles(directory=str(_FRONTEND_BUILD / "static")),
+        name="static",
+    )
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    def _spa_fallback(full_path: str):
+        # Don't intercept /api/* — router already handled it
+        if full_path.startswith("api/"):
+            raise HTTPException(404)
+        candidate = _FRONTEND_BUILD / full_path
+        if candidate.exists() and candidate.is_file():
+            return _FR(str(candidate))
+        return _FR(str(_FRONTEND_BUILD / "index.html"))
 
 
 @app.on_event("startup")

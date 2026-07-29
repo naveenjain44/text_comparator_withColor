@@ -28,15 +28,18 @@ export default function GuidePage() {
         <Section title="1 · What it does">
           <p>
             <b>UAT Text Comparator</b> is a Python + React tool that does an apple-to-apple UAT
-            check between a marketing-email <b>mockup (.docx)</b> and its rendered{" "}
-            <b>output (.eml / .msg)</b>. It scores each section (subject, greeting, body, CTA,
-            URLs, images, footer) with a weighted overall score, stores every run in a local
-            history, and exports PDF, HTML or CSV — all without ever hitting the internet.
+            check between a marketing-email <b>mockup</b> and its rendered <b>output</b>. It
+            accepts <b>any of 10 file formats</b> on either side and scores every section
+            (subject, greeting, body, CTA, URLs, images, footer) with a weighted overall score.
           </p>
           <ul className="list-disc pl-5 space-y-1 text-zinc-300">
-            <li>Strikethrough text in the mockup is <b>automatically excluded</b>.</li>
-            <li>Glossary rules (e.g. <span className="font-mono">Hi</span> ↔ <span className="font-mono">Hey</span>) apply in SMART mode.</li>
-            <li>Every run is stored to a local SQLite DB and re-exportable.</li>
+            <li>Supported extensions on <b>both</b> sides: <code className="font-mono">.docx .eml .msg .pdf .html .htm .txt .pptx .xlsx .csv</code></li>
+            <li><b>Dynamic values</b> (dates, currency, card masks like <code className="font-mono">INR xx,xxx.00</code> / <code className="font-mono">4xxx8</code> / <code className="font-mono">05-Jun-2026</code>) auto-normalize so templates match rendered emails.</li>
+            <li>Strikethrough text in <code className="font-mono">.docx</code> mockups is <b>automatically excluded</b>.</li>
+            <li>Greeting appears in the Body Diff (as Para 1) and counts toward the body score.</li>
+            <li>Placement checking — text-matching paragraphs at different indices are flagged as <b>PLACEMENT INCORRECT</b> (warning).</li>
+            <li>Word-level inline diff — matched words green, differences red.</li>
+            <li>Every run is stored to a local SQLite DB and re-exportable as PDF or HTML.</li>
             <li>Zero network calls at runtime.</li>
           </ul>
         </Section>
@@ -61,6 +64,27 @@ yarn install
 yarn start           # http://localhost:3000`}</Pre>
             </li>
             <li>Open <a className="underline text-white inline-flex items-center gap-1" href="http://localhost:3000" target="_blank" rel="noreferrer">http://localhost:3000 <ExternalLink className="w-3 h-3"/></a>. Turn off Wi-Fi — everything still works.</li>
+          </Ol>
+        </Section>
+
+        <Section title="3 · One-click bundle (single .exe / .app)">
+          <p>Ship the whole thing to teammates without Python or Node.</p>
+          <Ol>
+            <li>
+              <b>macOS / Linux:</b>
+              <Pre>{`chmod +x build.sh
+./build.sh
+open dist/uat-tool       # single binary — double-click it`}</Pre>
+            </li>
+            <li>
+              <b>Windows (PowerShell):</b>
+              <Pre>{`build.bat
+start dist\\uat-tool.exe`}</Pre>
+            </li>
+            <li>
+              The binary starts a local FastAPI server on <code className="font-mono">127.0.0.1:8001</code> and opens
+              the browser automatically. No Python or Node install needed on the target machine.
+            </li>
           </Ol>
         </Section>
 

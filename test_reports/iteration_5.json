@@ -1,0 +1,60 @@
+{
+  "summary": "Iteration_5 full-stack verification. Backend: 74 pytest tests (23 pre-existing regression in backend_test.py + 51 new in test_iteration5.py) — 73 passed, 1 xfail (documented noise-filter gap). All requested acceptance criteria for the AmEx PDF<->EML workflow PASS: greeting extracted as 'Dear KIRTIMAAN CHHABRA,' with status=match, greeting prepended as body Para 1 with status=match, 'INR xx, xxx.00' vs 'INR 0.00' row has similarity==1.0, body score = 56.48 (>40), no 400/500. /api/supported returns all 10 extensions. All 9 non-.msg parsers parse; unsupported ext raises ValueError. Dynamic normalization unit tests (AMOUNT/DATE/MASK/LONGNUM) pass; STRICT mode correctly does NOT normalize (similarity<1.0). Cross-format any-to-any compare verified for txt->docx, html->eml, csv->xlsx, pdf->txt, pptx->html and reverse EML->PDF. Frontend E2E on public preview: both upload zones expose the full 10-ext accept string, AmEx PDF+EML run renders diff-report with overall 37.92%, diff-body-0 shows greeting on BOTH sides with MATCH badge, two INR rows show similarity 100.00%, reverse EML->PDF works (37.24%), all 6 result tabs switch, PDF/HTML export downloads, history sidebar (31 items) loads a past run, glossary/batch/guide navigation and PRD .docx download all work, zero console errors. Packaging static checks pass (launcher.py imports, uat_tool.spec/build.sh/build.bat non-empty, StaticFiles mount correctly guarded by _FRONTEND_BUILD.exists() so dev startup is unaffected).",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "comparator._is_noise_line", "issue": "2-word avatar initials like 'K C' are NOT filtered as noise (the letter-spaced heuristic only runs when len(words)>=3, and the short-line rule only when len(words)<2). Feature claim #4 ('K C' avatar initials stripped) is only partially implemented. Test marked xfail in tests/test_iteration5.py::TestNoiseFilter."},
+      {"endpoint": "comparator._is_noise_line / _NOISE_PATTERNS", "issue": "Gmail chrome URLs extracted from PDF are not stripped when the wrapped line has trailing text (e.g. 'https://mail.google.com/mail/u/0/?ik=...&permmsgid=... 1/3'). The pattern '^https?://\\S+$' is fully anchored, so these survive and become 2 spurious 'missing' body rows (rows 17 & 28 in the AmEx report), depressing the body score."},
+      {"endpoint": "comparator.apply_dynamic_normalization", "issue": "Date regex does not tolerate whitespace after the separator produced by PDF line wrapping: '06- Jun-2026' is left un-normalized ('as of 06- Jun-2026' -> unchanged) while the EML side yields '06-Jun-2026'. This makes AmEx body Para 3 a MISMATCH (similarity 0.502). Suggest allowing optional spaces around '-'/'/' in the date patterns (e.g. \\d{1,2}\\s*[-\\s/]\\s*MON\\s*[-\\s/,]?\\s*\\d{2,4})."},
+      {"endpoint": "/api/compare (PDF mockup)", "issue": "PDF parser never sets ParsedEmail.subject, so subject score is always 0% when the mockup is a PDF (AmEx run: subject '' vs 'Fwd: Your balance update' -> 0%, costing 15% of the weighted overall). Consider deriving subject from the first non-noise PDF line or the filename."},
+      {"endpoint": "/api/compare (links scoring)", "issue": "links pct is computed from both-text-AND-url matches only. AmEx run reports links 0/15 = 0% even though link_stats shows url_matched=11 — because the PDF side's link text IS the raw URL. A 0% URL score for an 11/15 URL match is misleading and drags overall to 'mismatch'."},
+      {"endpoint": "/api/compare (footer scoring)", "issue": "Footer section shows status MATCH / similarity 100% when BOTH sides are empty ('—' vs '—'). Empty-vs-empty should be 'n/a' / excluded from weighting rather than a free 100%."},
+      {"endpoint": "/api/batch", "issue": "_add_file heuristic still treats the first-seen supported file with a stem as the 'mockup' and names it '{stem}.docx' in the report (rep['mockup_filename'] = f'{stem}.docx') even when the real mockup was a .pdf/.txt. Batch reports therefore show wrong mockup filenames/extensions for non-docx mockups."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "DiffReport", "issue": "Column headers are hardcoded to 'MOCKUP (.DOCX)' and 'OUTPUT (.EML / .MSG)' even when the uploaded pair is PDF+EML. With universal file support these labels should reflect the actual uploaded extensions.", "selector": "[data-testid^=\"diff-body-\"]", "priority": "MEDIUM"},
+      {"component": "Guide page", "issue": "Guide copy still describes the tool as 'mockup (.docx) and its rendered output (.eml/.msg)' and does not mention the 10 supported formats or the new single-binary (PyInstaller) build. Docs are stale vs iteration_5.", "selector": "/guide", "priority": "LOW"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Compare - result cards", "issues": ["No visible issue: contrast, spacing, tab alignment and history sidebar all render correctly at 1920x1080. Footer tab body is very sparse when both sides are empty (shows only '—')."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_iteration5.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Fix _is_noise_line to also drop 2-token avatar initials like 'K C' (all tokens length<=2).",
+    "Un-anchor the bare-URL noise pattern (use search for a long mail.google.com/URL-dominated line) so Gmail PDF chrome lines with trailing page numbers are stripped.",
+    "Allow whitespace around date separators in apply_dynamic_normalization so PDF-wrapped '06- Jun-2026' collapses to <DATE> (currently makes AmEx Para 3 a 0.502 mismatch).",
+    "Populate subject for PDF (and txt/xlsx/pptx/csv) parses, or exclude subject from weighting when the mockup format cannot carry one — otherwise every PDF mockup loses 15% overall.",
+    "Reconsider links scoring: report partial credit when URLs match but link text differs (AmEx shows 0/15 despite url_matched=11).",
+    "Treat empty-vs-empty footer/section as n/a instead of 100% match.",
+    "Show actual uploaded file extensions in DiffReport column labels instead of hardcoded '.DOCX' / '.EML / .MSG'.",
+    "Fix /api/batch mockup filename to use the real extension rather than always '{stem}.docx'.",
+    "Add 'lxml' (and 'soupsieve') to hiddenimports in /app/uat_tool.spec — BeautifulSoup(html, 'lxml') passes the parser name as a string, so PyInstaller's static analysis will NOT collect lxml and HTML/EML parsing will crash in the packaged binary.",
+    "Update the Guide/PRD copy for the 10 supported formats and the new build scripts."
+  ],
+  "critical_code_review_comments": [
+    "/app/uat_tool.spec: hiddenimports lacks 'lxml' / 'lxml.etree' / 'soupsieve'; BeautifulSoup's parser is selected by string so the bundle will fail at runtime on every .html/.htm/.eml/.msg file. Highest-risk packaging defect.",
+    "/app/backend/comparator.py is 970 lines (>700 guideline) and now mixes parsing, noise filtering, normalization and scoring — split into normalize.py / parse_*.py / score.py.",
+    "server.py SPA catch-all '@app.get(\"/{full_path:path}\")' is only registered when frontend/build exists; good, but it will also swallow /docs and /openapi.json in the bundle since those routes are registered before it (FastAPI resolves in order, so they are fine) — worth an explicit test once a build exists.",
+    "parsers.py imports private helpers (_split_sections, _leaf_blocks, _parse_html_body) from comparator — promote them to a public parsing module to avoid a fragile private-API dependency.",
+    "/api/batch _add_file has an unused local 'low' and a stem-collision heuristic that silently mislabels mockups; make mockup/output selection explicit (e.g. filename suffix _mockup/_output or an ordered pair upload)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_iteration5.py (new)",
+    "/app/backend/tests/backend_test.py (updated 2 stale assertions: body rows 9->10 and correct-placement 7->8 because greeting is now prepended into body — intentional iteration_5 behaviour change)"
+  ],
+  "success_rate": {"backend": "100% (73 passed, 1 documented xfail of 74)", "frontend": "100% of tested flows (all iteration_5 acceptance checks + iteration_3 regression)"},
+  "seed_data_creation": "Generated cross-format stub files in /tmp/uat_stubs (stub.txt/.csv/.html/.htm/.docx/.xlsx/.pptx/.eml/.pdf) via the stub_files session fixture in test_iteration5.py. History entries created by the compare runs use real sample files; TEST_ prefix used in stub content. Note: /tmp is not persistent — the fixture regenerates them on every run.",
+  "should_call_test_agent_after_fix": true,
+  "should_main_agent_self_test": false,
+  "test_credentials": "N/A - app is fully offline with no auth. /app/memory/test_credentials.md not required.",
+  "context_for_next_testing_agent": "Run `cd /app/backend && python -m pytest tests/ -q` — expect 73 passed + 1 xfail. tests/test_iteration5.py covers /api/supported, all parsers, dynamic normalization units, noise filter, the AmEx PDF<->EML scenario (TestAmexPdfEml), any-to-any cross-format compare, and packaging static checks. The one xfail (TestNoiseFilter 'K C') is a real product gap — if the main agent fixes _is_noise_line, remove the xfail marker (strict=True so it will fail loudly once fixed). Frontend: preview URL https://docx-eml-matcher.preview.emergentagent.com; useful testids: upload-mockup-input, upload-output-input, run-compare-btn, diff-report, score-overall, result-tab-{subject,body,cta,links,images,footer}, diff-body-{i} (+ -badge/-placement), export-pdf-btn, export-html-btn, history-item-*, download-prd-btn. When counting body rows use `div[data-testid^=\"diff-body-\"]:not([data-testid$=\"-badge\"]):not([data-testid$=\"-placement\"])` (37 rows for the AmEx pair) and match similarity as '100.00%' not '100%'. AmEx baseline numbers to compare against after fixes: overall 37.92%, subject 0%, body 56.48%, cta 50%, links 0/15, images 0/6, footer 100%.",
+  "rca_of_the_issue": "No blocking defect. Root causes of the reported scoring gaps: (1) noise heuristics in comparator._is_noise_line use word-count thresholds that miss 2-token avatar initials and use a fully-anchored URL regex that misses PDF-wrapped Gmail URLs with trailing page markers; (2) apply_dynamic_normalization pre-folds whitespace only between digit/comma pairs, so PDF text-extraction artefacts like '06- Jun-2026' (space after the hyphen) never reach the <DATE> patterns; (3) the PDF parser builds ParsedEmail via _wrap_text_as_email which never assigns .subject, so subject similarity is 0 for PDF mockups; (4) links pct requires simultaneous text+URL equality, which is unattainable when one side's link text is the raw URL. Together these keep the AmEx overall verdict at 'mismatch' (37.92%) even though every explicitly requested acceptance criterion for iteration_5 is met."
+}

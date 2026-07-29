@@ -237,9 +237,10 @@ class TestV2Paragraphs:
     def test_samples_v2_exist(self):
         assert DOCX_V2.exists() and EML_V2.exists()
 
-    def test_body_row_count_is_nine(self, report_v2):
+    def test_body_row_count_is_ten(self, report_v2):
+        # iteration_5: greeting is now prepended as body para 1 → 9 + 1 = 10 rows
         rows = report_v2["body"]
-        assert len(rows) == 9, f"expected 9 body rows, got {len(rows)}"
+        assert len(rows) == 10, f"expected 10 body rows, got {len(rows)}"
 
     def test_row_fields_present(self, report_v2):
         for i, r in enumerate(report_v2["body"]):
@@ -261,7 +262,8 @@ class TestV2Paragraphs:
             assert r["text_match"] is True
             assert r["similarity"] >= 0.98, r["similarity"]
             assert r["mockup_index"] != r["output_index"]
-        assert len([r for r in rows if r["placement"] == "correct"]) == 7
+        # iteration_5: greeting row added → 8 correct-placement rows
+        assert len([r for r in rows if r["placement"] == "correct"]) == 8
 
     def test_strikethrough_excluded_v2(self, report_v2):
         row = report_v2["body"][1]

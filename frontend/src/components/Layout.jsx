@@ -23,10 +23,10 @@ export default function Layout() {
             </div>
             <div>
               <div className="text-[15px] font-semibold tracking-tight leading-none">
-                UAT Text Comparator
+                SCT Text Comparator
               </div>
               <div className="text-[10px] text-zinc-500 font-mono uppercase tracking-[0.16em] mt-1">
-                offline · mockup ↔ email
+               mockup ↔ email
               </div>
             </div>
           </div>

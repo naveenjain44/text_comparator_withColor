@@ -101,8 +101,54 @@ def normalize_ws(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").strip())
 
 
+# ---------- Dynamic value normalization ----------
+# In SMART mode we collapse dynamic tokens (dates, currency amounts, masked
+# card numbers, long digit strings) so template placeholders like
+# "INR xx,xxx.00" or "4xxx8" match the real values in the rendered email.
+
+_MONTHS = r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*"
+
+_DYNAMIC_PATTERNS = [
+    # Currency amounts with symbol/name: INR 1,234.56 / INR xx,xxx.00 / $12.50 / ₹100
+    (re.compile(r"(?:INR|USD|EUR|GBP|CAD|AUD|SGD|Rs\.?|[\$€£₹])\s*[\dx][\dx,]*(?:\.[\dx]+)?",
+                re.I), "<AMOUNT>"),
+    # Bare amounts with thousands separator + 2 decimals
+    (re.compile(r"\b[\dx]{1,3}(?:,[\dx]{3})+(?:\.[\dx]{1,4})?\b"), "<AMOUNT>"),
+    # Bare decimal amounts (e.g. 1234.56 or 0.00 or xx.xx)
+    (re.compile(r"\b[\dx]+\.[\dx]{2,4}\b"), "<AMOUNT>"),
+    # Dates like 05-Jun-2026, 5 Jun 2026, 05/Jun/2026 — tolerate spaces around separators
+    (re.compile(rf"\b\d{{1,2}}\s*[-\s/]\s*{_MONTHS}\s*[-\s/,]?\s*\d{{2,4}}\b", re.I), "<DATE>"),
+    # Dates like Jun 5, 2026
+    (re.compile(rf"\b{_MONTHS}\s+\d{{1,2}}[,\s]+\d{{2,4}}\b", re.I), "<DATE>"),
+    # ISO / numeric dates
+    (re.compile(r"\b\d{4}[-/]\d{1,2}[-/]\d{1,2}\b"), "<DATE>"),
+    (re.compile(r"\b\d{1,2}[-/]\d{1,2}[-/]\d{2,4}\b"), "<DATE>"),
+    # Times like 10:57, 10:57:42
+    (re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b"), "<TIME>"),
+    # Masked card numbers / placeholder tokens containing 'x' between digits (4xxx8, xxxx-1234)
+    (re.compile(r"\b(?=[\dx]*[xX])[\dx]{4,}\b"), "<MASK>"),
+    # Long standalone number sequences (>= 6 digits) — invoice #s, transaction IDs
+    (re.compile(r"\b\d{6,}\b"), "<LONGNUM>"),
+]
+
+
+def apply_dynamic_normalization(text: str) -> str:
+    """Collapse dates/amounts/masks so templates match rendered values."""
+    if not text:
+        return ""
+    out = text
+    # Pre-fold spaces inside numeric groups: "INR xx, xxx.00" → "INR xx,xxx.00"
+    out = re.sub(r"(?<=[\dx,])\s+(?=[\dx,])", "", out)
+    out = re.sub(r"(?<=[\dx])\s+(?=\.)", "", out)
+    out = re.sub(r"(?<=\.)\s+(?=[\dx])", "", out)
+    for pattern, token in _DYNAMIC_PATTERNS:
+        out = pattern.sub(token, out)
+    return out
+
+
 def _smart_norm(text: str) -> str:
     t = normalize_ws(text).lower()
+    t = apply_dynamic_normalization(t)
     t = _PUNCT_RE.sub(" ", t)
     return normalize_ws(t)
 
@@ -347,10 +393,17 @@ def parse_msg(file_bytes: bytes) -> ParsedEmail:
 def _parse_html_body(html: str, result: ParsedEmail):
     soup = BeautifulSoup(html, "lxml")
 
-    # remove hidden preview text / trackers
-    for tag in soup.find_all(True, attrs={"style": True}):
-        style = (tag.get("style") or "").lower().replace(" ", "")
-        if "display:none" in style or "max-height:0" in style or "font-size:0" in style:
+    # Remove ONLY explicitly hidden elements — do NOT touch font-size:0 which is
+    # a common email spacing trick (used by AmEx, Outlook wrappers, etc.).
+    for tag in soup.find_all(True):
+        try:
+            attrs = getattr(tag, "attrs", None) or {}
+            style = (attrs.get("style") or "").lower().replace(" ", "")
+        except AttributeError:
+            continue
+        if not style:
+            continue
+        if "display:none" in style:
             tag.decompose()
     for tag in soup.find_all(["script", "style"]):
         tag.decompose()
@@ -407,6 +460,8 @@ def _leaf_blocks(soup) -> List[str]:
         txt = normalize_ws(tag.get_text(" ", strip=True))
         if not txt:
             continue
+        if _is_noise_line(txt):
+            continue
         key = txt.lower()
         if key in seen:
             continue
@@ -439,8 +494,13 @@ def _split_sections(result: ParsedEmail, lines: List[str]):
     if not lines:
         return
 
+    # Apply noise filter first so avatar/UI clutter never contaminates sections.
+    lines = [l for l in lines if not _is_noise_line(l)]
+    if not lines:
+        return
+
     greet_idx = None
-    for i, l in enumerate(lines[:6]):
+    for i, l in enumerate(lines[:25]):
         if is_greeting(l):
             greet_idx = i
             break
@@ -453,7 +513,8 @@ def _split_sections(result: ParsedEmail, lines: List[str]):
         rest = list(lines)
 
     if not result.subject:
-        for l in lines[:6]:
+        # Look further down (Gmail PDF prints have Gmail chrome before subject)
+        for l in lines[:20]:
             m = re.match(r"^\s*subject\s*[:\-]\s*(.+)$", l, re.I)
             if m:
                 result.subject = normalize_ws(m.group(1))
@@ -487,7 +548,13 @@ def _split_sections(result: ParsedEmail, lines: List[str]):
         if any(l.strip().lower() == (lk.text or "").strip().lower() for lk in result.links if is_cta_text(lk.text)):
             continue
         filtered.append(l)
-    result.body_paragraphs = filtered
+
+    # Include greeting as the FIRST body paragraph so it appears in the body diff
+    # (users want to see greeting differences alongside body paragraphs).
+    if result.greeting:
+        result.body_paragraphs = [result.greeting] + filtered
+    else:
+        result.body_paragraphs = filtered
 
 
 # ---------- Comparator ----------
@@ -502,9 +569,10 @@ def _status_from_pct(pct: float) -> str:
 
 def compare_field(a: str, b: str, glossary, mode: str) -> Dict:
     if not a and not b:
-        return {"mockup": "", "output": "", "similarity": 1.0, "status": "match"}
+        # Empty on both sides — neutral, don't reward or penalise
+        return {"mockup": "", "output": "", "similarity": 1.0, "status": "match", "empty": True}
     sim = similarity(a, b, glossary, mode)
-    return {"mockup": a or "", "output": b or "", "similarity": round(sim, 4), "status": _status_from_pct(sim)}
+    return {"mockup": a or "", "output": b or "", "similarity": round(sim, 4), "status": _status_from_pct(sim), "empty": False}
 
 
 def _word_diff(a: str, b: str, glossary, mode: str):
@@ -562,15 +630,22 @@ def compare_paragraphs(a: List[str], b: List[str], glossary, mode: str) -> Tuple
     rows: List[Dict] = []
     sims: List[float] = []
 
-    # First pass: greedy best-match for every mockup paragraph
+    # First pass: greedy best-match for every mockup paragraph. When two output
+    # paragraphs normalize to the same token (common after dynamic-value
+    # normalization e.g. "INR xx,xxx.00" and "INR 0.00" both → "AMOUNT"), we
+    # prefer the one at a similar position so scores stay stable.
+    n_a, n_b = len(a) or 1, len(b) or 1
     for i, ai in enumerate(a):
-        best_j, best_sim = -1, 0.0
+        best_j, best_sim, best_score = -1, 0.0, -1.0
         for j, bj in enumerate(b_norm):
             if j in used_b:
                 continue
             s = SequenceMatcher(None, a_norm[i], bj).ratio() if (a_norm[i] or bj) else 1.0
-            if s > best_sim:
-                best_sim, best_j = s, j
+            # position penalty (soft) — pick similar index when text sim is close
+            pos_penalty = abs((i / n_a) - (j / n_b))
+            score = s - pos_penalty * 0.05
+            if score > best_score:
+                best_score, best_sim, best_j = score, s, j
         if best_j >= 0 and best_sim >= 0.5:
             used_b[best_j] = i
             text_match = best_sim >= 0.98
@@ -637,7 +712,7 @@ def compare_links(a: List[LinkItem], b: List[LinkItem], glossary, mode: str) -> 
     used_b = set()
     rows: List[Dict] = []
     text_hits = url_hits = both_hits = 0
-    total = max(len(a), len(b)) or 1
+    total = max(len(a), len(b))
 
     for la in a:
         best_j, best_score = -1, -1.0
@@ -676,7 +751,9 @@ def compare_links(a: List[LinkItem], b: List[LinkItem], glossary, mode: str) -> 
         "text_matched": text_hits,
         "url_matched": url_hits,
         "total": total,
-        "pct": round(both_hits / total, 4) if total else 1.0,
+        # Score: 60% weight to url matches, 40% to text matches (partial credit).
+        # Empty on both sides → pct=1.0 (perfect) and total=0 so overall weight is dropped.
+        "pct": round((url_hits * 0.6 + text_hits * 0.4) / total, 4) if total else 1.0,
     }
     return rows, stats
 
@@ -684,7 +761,7 @@ def compare_links(a: List[LinkItem], b: List[LinkItem], glossary, mode: str) -> 
 def compare_images(a: List[ImageItem], b: List[ImageItem], glossary, mode: str) -> Tuple[List[Dict], Dict]:
     used_b = set()
     rows: List[Dict] = []
-    total = max(len(a), len(b)) or 1
+    total = max(len(a), len(b))
     matched = 0
 
     for ia in a:
@@ -763,16 +840,57 @@ def compare_cta(a: Optional[LinkItem], b: Optional[LinkItem], glossary, mode: st
     }
 
 
-# Weighted overall
+# Weighted overall (greeting is embedded in body → weight 0 to avoid double count)
 WEIGHTS = {
     "subject": 0.15,
-    "greeting": 0.05,
-    "body": 0.40,
+    "greeting": 0.00,
+    "body": 0.45,
     "cta": 0.15,
     "links": 0.10,
     "images": 0.10,
     "footer": 0.05,
 }
+
+
+# Lines that look like avatar initials, letter-spaced names, or emoji clutter.
+_NOISE_PATTERNS = [
+    re.compile(r"^\d{1,2}/\d{1,2}/\d{2,4},\s*\d{1,2}:\d{2}\s*.*(gmail|outlook)", re.I),
+    re.compile(r"^https?://\S+$"),
+    re.compile(r"^\s*<[^>]+@[^>]+>\s*$"),  # bare email addresses
+]
+
+
+def _is_noise_line(text: str) -> bool:
+    t = (text or "").strip()
+    if not t:
+        return True
+    for p in _NOISE_PATTERNS:
+        if p.search(t):
+            return True
+    words = t.split()
+    # Two-word letter-only tokens (Gmail avatar initials like "K C")
+    if len(words) <= 2 and all(len(w) <= 2 and w.isalpha() for w in words):
+        return True
+    # too short and no digits
+    if len(words) < 2 and not re.search(r"\d", t):
+        # allow single-word greetings / cta-ish tokens
+        if not is_greeting(t) and not is_footer_line(t) and not is_cta_text(t):
+            return True
+    # letter-spaced text like "K irtimaan C hhabra"
+    if len(words) >= 3:
+        singletons = sum(1 for w in words if len(w) <= 2)
+        if singletons / len(words) >= 0.5:
+            return True
+    # Gmail print chrome: line dominated by a mail.google.com URL
+    if "mail.google.com" in t.lower() and len(t) > 40 and t.count("&") >= 2:
+        return True
+    # mostly punctuation / emojis
+    letters = sum(1 for c in t if c.isalnum())
+    if letters == 0:
+        return True
+    if letters / len(t) < 0.35:
+        return True
+    return False
 
 
 def compare(mockup: ParsedEmail, output: ParsedEmail,
@@ -798,7 +916,27 @@ def compare(mockup: ParsedEmail, output: ParsedEmail,
         "images": round(img_stats["pct"] * 100, 2),
         "footer": round(footer["similarity"] * 100, 2),
     }
-    overall_score = round(sum(scores[k] * WEIGHTS[k] for k in scores), 2)
+
+    # Compute overall as WEIGHTED average, dropping sections that are empty on
+    # both sides (they carry weight=0 to avoid free "match" credit that
+    # inflates the score).
+    def _has_content(name: str) -> bool:
+        if name == "body":
+            return len(body_rows) > 0
+        if name == "links":
+            return (link_stats.get("total") or 0) > 0
+        if name == "images":
+            return (img_stats.get("total") or 0) > 0
+        if name == "cta":
+            return not (cta.get("mockup_text") == "" and cta.get("output_text") == "" and cta.get("mockup_url") == "" and cta.get("output_url") == "")
+        section_dict = {"subject": subj, "greeting": greet, "footer": footer}.get(name)
+        if not section_dict:
+            return True
+        return not section_dict.get("empty", False)
+
+    effective_w = {k: (v if _has_content(k) else 0.0) for k, v in WEIGHTS.items()}
+    total_w = sum(effective_w.values()) or 1.0
+    overall_score = round(sum(scores[k] * effective_w[k] for k in scores) / total_w, 2)
 
     total_checks = 4 + len(body_rows) + len(link_rows) + len(img_rows)
     all_states = [subj["status"], greet["status"], cta["status"], footer["status"]] + \

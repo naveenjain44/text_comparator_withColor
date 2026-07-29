@@ -65,8 +65,10 @@ function WordStream({ words, kind = "mockup" }) {
   );
 }
 
-function DiffRow({ label, mockup, output, status, testid, extra, mockupWords, outputWords, placement }) {
+function DiffRow({ label, mockup, output, status, testid, extra, mockupWords, outputWords, placement, mockupExt, outputExt }) {
   const useWords = Array.isArray(mockupWords) || Array.isArray(outputWords);
+  const mLabel = `Mockup (.${(mockupExt || "docx").replace(/^\./, "")})`;
+  const oLabel = `Output (.${(outputExt || "eml").replace(/^\./, "")})`;
   return (
     <div className="border-b border-zinc-800 last:border-b-0" data-testid={testid}>
       <div className="flex items-start justify-between gap-4 px-4 py-3 bg-zinc-900/40">
@@ -95,7 +97,7 @@ function DiffRow({ label, mockup, output, status, testid, extra, mockupWords, ou
       <div className="grid grid-cols-1 lg:grid-cols-2">
         <div className="px-4 py-3 border-r border-zinc-800 min-w-0">
           <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1">
-            Mockup (.docx)
+            {mLabel}
           </div>
           {useWords ? (
             <WordStream words={mockupWords} kind="mockup" />
@@ -107,7 +109,7 @@ function DiffRow({ label, mockup, output, status, testid, extra, mockupWords, ou
         </div>
         <div className="px-4 py-3 min-w-0">
           <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1">
-            Output (.eml / .msg)
+            {oLabel}
           </div>
           {useWords ? (
             <WordStream words={outputWords} kind="output" />
@@ -163,6 +165,8 @@ const TABS = [
 
 export default function DiffReport({ report, mockupName, outputName }) {
   const [tab, setTab] = useState("body");
+  const mockupExt = (mockupName || "").split(".").pop()?.toLowerCase() || "docx";
+  const outputExt = (outputName || "").split(".").pop()?.toLowerCase() || "eml";
 
   const scores = report?.scores || {};
   const s = report?.summary || {};
@@ -253,6 +257,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
       <div className="border border-zinc-800 rounded-md overflow-hidden bg-[#141416]" data-testid="result-panel">
         {tab === "subject" && (
           <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
             label="Subject"
             mockup={report?.subject?.mockup}
             output={report?.subject?.output}
@@ -281,6 +286,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
                   : `Output #${row.output_index + 1} (not in mockup)`;
               return (
                 <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
                   key={i}
                   label={`Para ${idx + 1}`}
                   mockup={row.mockup}
@@ -301,6 +307,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
         )}
         {tab === "cta" && (
           <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
             label="CTA — text + URL"
             mockup={`${report?.cta?.mockup_text || ""}\n${report?.cta?.mockup_url || ""}`.trim()}
             output={`${report?.cta?.output_text || ""}\n${report?.cta?.output_url || ""}`.trim()}
@@ -313,6 +320,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
           <div>
             {(report?.links || []).map((row, i) => (
               <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
                 key={i}
                 label={`Link ${i + 1}`}
                 mockup={`${row.mockup_text}\n${row.mockup_url}`.trim()}
@@ -335,6 +343,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
                 : "no rendered image";
               return (
                 <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
                   key={i}
                   label={`Image ${i + 1}`}
                   mockup={`${row.mockup_filename || "—"}\nalt: ${row.mockup_alt || "—"}`}
@@ -352,6 +361,7 @@ export default function DiffReport({ report, mockupName, outputName }) {
         )}
         {tab === "footer" && (
           <DiffRow
+              mockupExt={mockupExt} outputExt={outputExt}
             label="Footer"
             mockup={report?.footer?.mockup}
             output={report?.footer?.output}

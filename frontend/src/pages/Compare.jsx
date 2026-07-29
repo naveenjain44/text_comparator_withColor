@@ -11,6 +11,8 @@ import {
   pingBackend, friendlyError, BACKEND_URL,
 } from "@/lib/api";
 
+const SUPPORTED_EXTS = ".pdf,.txt,.docx,.msg,.htm,.html,.eml,.pptx,.xlsx,.csv";
+
 export default function ComparePage() {
   const [mockup, setMockup] = useState(null);
   const [output, setOutput] = useState(null);
@@ -134,11 +136,11 @@ uvicorn server:app --host 127.0.0.1 --port 8001`}
           <div className="border border-zinc-800 rounded-md bg-[#141416] p-4">
             <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500 mb-3 flex items-center justify-between">
               <span>Mockup source</span>
-              <span className="text-zinc-600">.docx</span>
+              <span className="text-zinc-600 truncate ml-2">docx · pdf · html · txt · pptx · xlsx · csv · eml · msg</span>
             </div>
             <UploadZone
               label=""
-              accept=".docx"
+              accept={SUPPORTED_EXTS}
               file={mockup}
               onFile={setMockup}
               onClear={() => setMockup(null)}
@@ -150,12 +152,12 @@ uvicorn server:app --host 127.0.0.1 --port 8001`}
           </div>
           <div className="border border-zinc-800 rounded-md bg-[#141416] p-4">
             <div className="text-[10px] font-mono uppercase tracking-[0.18em] text-zinc-500 mb-3 flex items-center justify-between">
-              <span>Email output</span>
-              <span className="text-zinc-600">.eml or .msg</span>
+              <span>Email / rendered output</span>
+              <span className="text-zinc-600 truncate ml-2">eml · msg · html · pdf · docx · txt · pptx · xlsx · csv</span>
             </div>
             <UploadZone
               label=""
-              accept=".eml,.msg"
+              accept={SUPPORTED_EXTS}
               file={output}
               onFile={setOutput}
               onClear={() => setOutput(null)}

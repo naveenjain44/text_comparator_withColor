@@ -1,0 +1,851 @@
+Delivered-To: naveenjain44@gmail.com
+Received: by 2002:a05:7300:6143:b0:307:3526:731c with SMTP id i3csp3122400dyb;
+        Thu, 18 Jun 2026 02:40:04 -0700 (PDT)
+X-Received: by 2002:a17:906:c14f:b0:bd8:fc89:cda0 with SMTP id a640c23a62f3a-c07336b4960mr157872666b.24.1781775604654;
+        Thu, 18 Jun 2026 02:40:04 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1781775604; cv=pass;
+        d=google.com; s=arc-20240605;
+        b=D/B7Lvg+a55FIbx/TMCSyxLjudoQpu82mqIOmUnUNcEioEODptvT2W0BV1423iCaUH
+         RkXc5ybK+fy/nS4u5vQOcRatXp5FjegKkMQyBaVkt+tCBvjnak4OVtGOGVLl+dI47+th
+         YEAdWETxKzzQSA93uxDEIoLBogGb4vv2I9rO+qAfFytYGnTvuPwGC2bCa6WgVvY2LYPU
+         o7PrSEC2pCIIu1vXoSXugUWKQOgW03qCgYD+gBSOSPYzuO9mjEpNZD152/oxS1pfy7/v
+         aD74TG+S2F2bPDTjBrAFRaVxLkoFPr5ab9TAL1319ryS3MgCv6lX9rogura/S0iXHRcO
+         Je1g==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=afbW1tZkZ/Nzo65PMrhifzFV926AEg4wbo7z2+k+GV8=;
+        fh=emVQP0AckUAlq2IlquiMYX7WC8MY/ZXUtbc+Y1sG7rg=;
+        b=OBg3fR2PVlMzrfpyAVNEi/A65Z8Sw871MUfE4AEutqleKOxW7f1Uxa+5RUkDljJGS7
+         yli4yN1A89fwGWK7W5KfYWIvK6dkvngr+qjRXOuuyHp8VYBl14hzg9BvmiNymJGvNjRs
+         +U1jiSjky/+NRcWe8kOVCzlogb1AYOih7dCR8OIhSgfamDg+NBcbV2nZK07l60Fvizhc
+         t4bSJpXw2g6rJSRxTqyKvu3KoFXBXxC613jqdQqLtA5fnhEQICNjjAJMU5wSuLAABB6d
+         ujETOsFRrSdRyMMgc6Pc4TNJ7QWpgFEdi0TXYN5Mml6J2pQ8hqVVDDE+XiefB8+s0iDb
+         sU8Q==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=Qq66zpIN;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of kirtimaan.spaceman@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=kirtimaan.spaceman@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <kirtimaan.spaceman@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id a640c23a62f3a-c0415a16f2csor170370666b.1.2026.06.18.02.40.04
+        for <naveenjain44@gmail.com>
+        (Google Transport Security);
+        Thu, 18 Jun 2026 02:40:04 -0700 (PDT)
+Received-SPF: pass (google.com: domain of kirtimaan.spaceman@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=Qq66zpIN;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of kirtimaan.spaceman@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=kirtimaan.spaceman@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1781775604; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kI/YqDNSnKt+HpHeDuxU1CYcykfg7LWnvZpQz2JpGLttVexO5McMkZ3XeEZBp4Nd+1
+         OtAa1n0t9+xNFeDEdriMgaL/ujEZ14rJfuu+LndwIkIIITOiEnO6qNe3f1j0RNroxgy2
+         PYIXpsqjogefrnSzhTwCepl5kqRFVHdHja7TsPRrcLyQZFkh2ieKSUkqTjJ+6BrNE0Dc
+         Pnz2fuqngWrqNJ32EJNED5/FqAOya61fWrEyT2YMS2a/G7XqyrRwh3I5RRNCYabc4wXU
+         t+fFy5ulNybQRcoP4vg7g7wKH7Hoz3dVUM5gK0NZczLffJin6mYYURxeghu8iYJRIB24
+         zmwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=afbW1tZkZ/Nzo65PMrhifzFV926AEg4wbo7z2+k+GV8=;
+        fh=emVQP0AckUAlq2IlquiMYX7WC8MY/ZXUtbc+Y1sG7rg=;
+        b=VNyFk6nxdzCvzaAMFnc0CyRhHu/+8Xo6BNTStTCRHP4vg0B2W9JyG0J1qjgs0sy7/g
+         sTvEm3c+GDjcUPRKdEnz4WVRgZJB7wBPHQL2OQ8GhwKTIOKfDlT+wjf20CB2TnRe+7fG
+         bMlvu1MJVfFb5QV8tFFnI+YJuk0HjdMM+ku82qMt9McyCVm+FOSZbc0pp/gz+ZclLs7a
+         1zUACFRCzJal4zPRGzOzmXPj3zvgD8vzUja/oH2m4iO+hSpOeeX63HnKR1sc1bdMduzQ
+         Y2bvwjq4STOg+c6XgMxa0WL/Fi/1l3dXMWCR10KYRsGL+kiwUukMCWklRvAYg4+Zw6bN
+         2rkA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781775604; x=1782380404; dara=google.com;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=afbW1tZkZ/Nzo65PMrhifzFV926AEg4wbo7z2+k+GV8=;
+        b=Qq66zpINPMiSMlcDmThQ7Pl9YDyFQbXkvTtswpTFad3r1ybm5KXtl/6RG8p5Xzpw1H
+         GZz+zb3VQbupWiFAMxhQIQkxG/aNJR6lmz62BleUJTshP3p7KT77BLdaZDTtfhJq7QT2
+         1s4nUDM3DPLk2MQJ0HZPfSVAZmSc8gE+6NimeetBuzs4D5gp76zGCp4ujwAKmMxufW55
+         5vhjM7nGw06VqDL3nifpuyga7R66+LiX7nIjw/t7gtOfetPzyz/0irPAvxXU3DtQGk8x
+         W4kAGS/kb2e07HWxCt7ndPxHyVUPvLrZGBZ5a54nL8tXo2Fu7El+LFzA9WILDrEe1/Ey
+         tZBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781775604; x=1782380404;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=afbW1tZkZ/Nzo65PMrhifzFV926AEg4wbo7z2+k+GV8=;
+        b=ZKHWfZ5uv+9Yj8Wb1xtoIwGJmI6ND9NMlLmrDwu5y8pnXztATlM5OfTfSpqJ16Sraa
+         RmIgEDAfWq9V/JzlAXkRF3lDBQZ/MYHBaP6qJMUmVat8oV+bsFS95rBRNW3dPMff7mrt
+         KxKjp+wjBeYujO5BY0uWR6068FPyMwZaNR7xtOTz8Efh9/MEkBAqmpxSxDS44vJWID2m
+         epmPiiD1ZX8kNWqwDDDG1bZdAHq3PSOINzzJS2MIT8ABGuX6enqXkTxA+Omr0Xkwxl9s
+         4waGb6U8q+TwfTolwpMPIPosJWGsaZa88WRj4hZbdxFMj9ty9TVpkFQEbm2GpGVaYSBh
+         jW6w==
+X-Gm-Message-State: AOJu0YyQtFxqZVsjA5pHMdb0bcAD3KmGmenavR6mlNl39FsqAfNn93CV
+	XL2px9uxcybKzeETxqC8+F7jvzFjwzZvEuVxT5V2WjoyF9sHB7ytuX/sp2Ifxtpwr5kohvSeHs5
+	7rG7lzrNVuSoA31l6l7a6pKwNpnJ4GQ4IqL/l
+X-Gm-Gg: AfdE7cmdpD/xYwyqxLycdi8EL1rnzAmWoc3g4j7PKciVt5TxL9nCE6EaIqexhmV/edS
+	S261gk3O3VBe5sbOZSX0pCHM/MGLHyO76/4P8KTF+1/OTWs7hLfgVA58i20sP7yQnVRWod9r3LF
+	Q1iAiBVXR+EQOaKe2mjTI1Qzu3+ej+TSS4qR373WTis5Eu6+sMalh1WaU1fI2AApo+Ff7l8DG6l
+	fDClpIfdjCGrPb4bQdiQSRULlHo0JVKVRpaV2aTLRcGjQgXm0wUYmIB5KinenzetxHwD4gyaw==
+X-Received: by 2002:a17:907:720e:b0:bec:5264:e527 with SMTP id
+ a640c23a62f3a-c0733f8ed66mr170437966b.26.1781775603791; Thu, 18 Jun 2026
+ 02:40:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <DA.5E.07059.9CFA32A6@hpnplmomiw06>
+In-Reply-To: <DA.5E.07059.9CFA32A6@hpnplmomiw06>
+From: Kirtimaan Chhabra <kirtimaan.spaceman@gmail.com>
+Date: Thu, 18 Jun 2026 15:09:49 +0530
+X-Gm-Features: AVVi8CfGQSAW9xi15nkz2epBG8RMM56FivD5feR_QVCF4z9ahjIcTbO1a_VUhCs
+Message-ID: <CAGoa0YcgQ1yNYmA6Rbt62phRzn+aJN4MGD5Q1tR56hkFKkBQCg@mail.gmail.com>
+Subject: Fwd: Your balance update
+To: naveenjain44@gmail.com
+Content-Type: multipart/alternative; boundary="000000000000eefbc0065483f58e"
+
+--000000000000eefbc0065483f58e
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+KC
+Kirtimaan Chhabra
+=E2=98=85-_-[image: =EF=92=A7]
+Plant   Donate  Save
+Trees   Blood    Water
+
+
+---------- Forwarded message ---------
+From: American Express <AmericanExpress@welcome.americanexpress.com>
+Date: Sat, 6 Jun, 2026, 10:57
+Subject: Your balance update
+To: <kirtimaan.spaceman@gmail.com>
+
+
+Important information about your account
+[image: American Express Logo]
+
+*KIRTIMAAN CHHABRA*
+
+Account ending: 4xxx9
+[image: Card Art]
+[image: Alternate Text]
+
+Balance Update
+
+Dear KIRTIMAAN CHHABRA,
+
+
+
+This communication is being sent to you in accordance with the extant
+directions under the Reserve Bank of India (Credit Card and Debit Card =E2=
+=80=93
+Issuance and Conduct) Directions, 2022, to inform you about the balance on
+your Card account (including credit balance), along with recent credits and
+debits, and to facilitate the refund of the available credit balance.
+
+Here is the latest balance on your American Express=C2=AE Card as of 06-Jun=
+-2026
+
+Last statement balance
+
+INR xx, xxx.00
+
+closing date 02-Jun-2026
+
+Recent credits
+
+INR xx, xxx.00
+
+since 03-Jun-2026
+
+Recent debits
+
+INR 0.00
+
+since 03-Jun-2026
+
+Current balance*
+
+INR 0.00
+View activity
+<https://go.amex/view_your_recent_activity_en_in?comm_track_id=3Dmhywgd2e&d=
+otAmexDomain=3Dgo>
+
+*What would you like to do?*
+
+
+
+   - *Pay your bill online
+   <https://www.americanexpress.com/en-in/services/pay-your-bill/billdesk/>=
+*
+   - *View your recent activity
+   <https://www.americanexpress.com/Tracking?mid=3DHEALT0302025081006075609=
+63005356&msrc=3D1001&url=3Dhttps%3A%2F%2Fglobal.americanexpress.com%2Fmyca%=
+2Fintl%2Festatement%2Fjapa%2Fstatement.do%3Frequest_type%3D%26Face%3Den_IN%=
+26BPIndex%3D0%26sorted_index%3D0>*
+   - *Request a refund
+   <https://iforms.americanexpress.com/iFormsSecure/auth_reg/en_IN/iforms.d=
+o?cuid=3DCreditBalanceRefund_en_IN&evtsrc=3Dlink&evttype=3D0>*(in
+   case of a credit balance)
+   - *Make a payment
+   <https://www.americanexpress.com/Tracking?mid=3DHEALT0302025081006075609=
+63005356&msrc=3D1001&url=3Dhttps%3A%2F%2Fwww.americanexpress.com%2Fin%2Fcus=
+tomer-service%2Fpayments-statements-and-balance%2Fmaking-a-payment.html>*(i=
+n
+   case of an outstanding balance)
+   - *View your Statement
+   <https://www.americanexpress.com/en-us/account/login?DestPage=3Dhttps%3A=
+%2F%2Fglobal.americanexpress.com%2Fdashboard%3Finav%3Den_in_menu_my_account=
+_top_links_view_my_account%26COUNTRY_CODE%3DIN%26COUNTRY_CODE%3DIN>*
+   - *Update your Card Alert settings
+   <https://www.americanexpress.com/Tracking?mid=3DHEALT0302025081006075609=
+63005356&msrc=3D1001&url=3Dhttp%3A%2F%2Fwww.americanexpress.co.in%2Falerts>=
+*
+
+
+
+Thank you for your Cardmembership.
+
+
+[image: Don't live life without it]
+Privacy statement
+<https://www.americanexpress.com/en-in/company/legal/privacy-center/online-=
+privacy-statement/>
+Contact us <https://www.americanexpress.com/in/support/contact-us.html>
+Update your email address
+<https://www.americanexpress.com/en-in/account/login?DestPage=3Dhttps%3A%2F=
+%2Fglobal.americanexpress.com%2Femail>
+
+We are unable to accept incoming emails to this address. In case you have
+any questions, please feel free to call American Express at the number
+listed on the back of your Card or alternatively you can write to us:
+
+
+
+American Express Banking Corp.
+
+Cyber City, Tower - C, Bldg. No 8, Sector 25
+
+DLF City Ph II, Gurgaon - 122002
+
+
+
+Thank you for using American Express Online Services.
+
+
+
+For details on our email practices, view our Privacy Statement
+<https://go.amex/privacy-in?comm_track_id=3Dmhywgd2e&dotAmexDomain=3Dgo>.
+
+
+
+American Express Banking Corp.,
+
+Incorporated in the U.S.A.
+
+
+
+=C2=AE Registered Trademark of American Express Company.
+
+Copyright 2025 American Express Company. All Rights Reserved.
+
+SAM0FYI005
+
+--000000000000eefbc0065483f58e
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div><div><br></div><div><br></div><div data-smartmail=3D=
+"gmail_signature"><div dir=3D"ltr"><div><div dir=3D"ltr"><div dir=3D"ltr"><=
+div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><div dir=
+=3D"ltr"><div dir=3D"ltr"><div dir=3D"ltr"><p style=3D"text-align:center">
+</p><div style=3D"text-align:left"><div style=3D"color:rgb(136,136,136);fon=
+t-size:small"><font color=3D"#ff00ff" style=3D"font-size:xx-large">K</font>=
+<font color=3D"#0000ff" style=3D"font-size:xx-large">C</font></div><div sty=
+le=3D"color:rgb(136,136,136);font-size:small"><font size=3D"1" color=3D"#ff=
+00ff">K</font><font color=3D"#0000ff" size=3D"1">irtimaan C</font><font siz=
+e=3D"1" color=3D"#ff00ff">hhabra</font></div><div style=3D"color:rgb(136,13=
+6,136);font-size:12.8px"><div style=3D"font-size:12.8px"><font size=3D"6"><=
+font color=3D"#6aa84f">=E2=98=85</font><font color=3D"#ff0000">-_-</font></=
+font><font size=3D"1"><img src=3D"https://ssl.gstatic.com/mail/emoji/6/48px=
+/emoji_u1f4a7.png" alt=3D"=EF=92=A7" width=3D"26" height=3D"26" style=3D"ma=
+rgin:0px 0px 0px 0.2ex;vertical-align:middle"></font></div><div style=3D"fo=
+nt-size:12.8px"><span style=3D"color:rgb(106,168,79)"><font size=3D"1">Plan=
+t=C2=A0 =C2=A0</font></span><span style=3D"color:rgb(255,0,0)"><font size=
+=3D"1">Donate</font>=C2=A0=C2=A0</span><span style=3D"color:rgb(61,133,198)=
+"><font size=3D"1">Save<br></font></span><span style=3D"color:rgb(106,168,7=
+9);font-size:x-small">Trees=C2=A0 =C2=A0</span><span style=3D"color:rgb(255=
+,0,0);font-size:x-small">Blood=C2=A0 =C2=A0 </span><span style=3D"color:rgb=
+(61,133,198);font-size:x-small">Water<br></span></div></div></div><p></p></=
+div></div></div></div></div></div></div></div></div></div></div></div><br><=
+div class=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"g=
+mail_attr">---------- Forwarded message ---------<br>From: <strong class=3D=
+"gmail_sendername" dir=3D"auto">American Express</strong> <span dir=3D"auto=
+">&lt;<a href=3D"mailto:AmericanExpress@welcome.americanexpress.com">Americ=
+anExpress@welcome.americanexpress.com</a>&gt;</span><br>Date: Sat, 6 Jun, 2=
+026, 10:57<br>Subject: Your balance update<br>To:  &lt;<a href=3D"mailto:ki=
+rtimaan.spaceman@gmail.com">kirtimaan.spaceman@gmail.com</a>&gt;<br></div><=
+br><br><u></u><div style=3D"background-color:#d9d9d6" role=3D"main"><div ar=
+ia-label=3D"Your balance update" class=3D"m_8259258787063220679mobile-body"=
+ style=3D"background-color:#d9d9d6" role=3D"article" lang=3D"en" dir=3D"aut=
+o"><div style=3D"background:#ffffff;background-color:#ffffff;margin:0px aut=
+o;max-width:620px"><table align=3D"center" border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" style=3D"background:#ffffff;backgrou=
+nd-color:#ffffff;width:100%"><tbody><tr><td style=3D"direction:ltr;font-siz=
+e:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-right:0;paddin=
+g-top:0;text-align:center"><div style=3D"margin:0px auto;max-width:620px"><=
+table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" style=3D"width:100%"><tbody><tr><td style=3D"direction:l=
+tr;font-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-rig=
+ht:0;padding-top:0;text-align:center"><div class=3D"m_8259258787063220679mj=
+-column-per-100" style=3D"font-size:0px;text-align:left;direction:ltr;displ=
+ay:inline-block;vertical-align:top;width:100%"><table border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr=
+><td style=3D"background-color:#d9d9d6;vertical-align:top;padding-top:0;pad=
+ding-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr>=
+<td align=3D"center" style=3D"font-size:0px;padding:10px 25px;word-break:br=
+eak-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helve=
+tica,sans-serif;font-size:13px;font-weight:400;line-height:20px;text-align:=
+center;color:#333333"><p style=3D"margin:0 0 0 0px">Important information a=
+bout your account</p></div></td></tr></tbody></table></td></tr></tbody></ta=
+ble></div></td></tr></tbody></table></div><div style=3D"margin:0px auto;max=
+-width:620px"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellsp=
+acing=3D"0" role=3D"presentation" style=3D"width:100%"><tbody><tr><td style=
+=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0;padding-lef=
+t:0;padding-right:0;padding-top:0;text-align:center"><div class=3D"m_825925=
+8787063220679mj-column-per-100" style=3D"font-size:0px;text-align:left;dire=
+ction:ltr;display:inline-block;vertical-align:top;width:100%"><table border=
+=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"1=
+00%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;padding-right=
+:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td align=
+=3D"left" class=3D"m_8259258787063220679pad-1" style=3D"font-size:0px;paddi=
+ng:10px 25px;padding-top:20px;padding-right:20px;padding-bottom:20px;paddin=
+g-left:20px;word-break:break-word"><table cellpadding=3D"0" cellspacing=3D"=
+0" width=3D"100%" border=3D"0" style=3D"color:#000000;font-family:Ubuntu,He=
+lvetica,Arial,sans-serif;font-size:13px;line-height:1;table-layout:auto;wid=
+th:100%;border:none"><tbody><tr><td width=3D"15%" valign=3D"top"><img src=
+=3D"https://cdaas.americanexpress.com/akamai/axp/comms/logos/logo.png" alt=
+=3D"American Express Logo" class=3D"m_8259258787063220679dls-logo-bluebox-s=
+olid-sm" width=3D"60" height=3D"60"></td><td style=3D"font-family:&quot;Hel=
+vetica Neue&quot;,Roboto,Helvetica,sans-serif;font-size:15px;font-weight:50=
+0;color:#333;padding-left:10px;padding-right:10px" class=3D"m_8259258787063=
+220679pad-1-l m_8259258787063220679pad-1-r" align=3D"right" valign=3D"top">=
+<p style=3D"display:inline-block;line-height:22px;margin:0" class=3D"m_8259=
+258787063220679body-1"><b>KIRTIMAAN CHHABRA</b></p><p style=3D"font-weight:=
+normal;line-height:22px;word-break:break-word;margin:0" class=3D"m_82592587=
+87063220679body-1">Account ending: 4xxx9</p></td><td align=3D"right" width=
+=3D"17%" valign=3D"top"><img src=3D"https://secure.cmax.americanexpress.com=
+/Internet/CardArt/JAPA/in-cardasset-config/images/GINGOLD0RW00S2.gif" alt=
+=3D"Card Art" class=3D"m_8259258787063220679dls-card-xs" width=3D"96" heigh=
+t=3D"60"></td></tr></tbody></table></td></tr></tbody></table></td></tr></tb=
+ody></table></div></td></tr></tbody></table></div><div style=3D"background:=
+#006fcf;background-color:#006fcf;margin:0px auto;max-width:620px"><table al=
+ign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pre=
+sentation" style=3D"background:#006fcf;background-color:#006fcf;width:100%"=
+><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding=
+-bottom:0;padding-left:0;padding-right:0;padding-top:0;text-align:center"><=
+div style=3D"margin:0px auto;max-width:620px"><table align=3D"center" borde=
+r=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"=
+width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20p=
+x 0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;text-alig=
+n:center"><div style=3D"background:#006fcf url(&#39;https://cdaas.americane=
+xpress.com/akamai/axp/comms/icons/hl-pattern-50pc.png&#39;) center top/auto=
+ repeat;background-position:center top;background-repeat:repeat;background-=
+size:auto;margin:0px auto;max-width:620px"><div style=3D"line-height:0;font=
+-size:0"><table align=3D"center" background=3D"https://cdaas.americanexpres=
+s.com/akamai/axp/comms/icons/hl-pattern-50pc.png" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#006fcf =
+url(&#39;https://ci3.googleusercontent.com/meips/ADKq_Nb9cLKgcSPobaX0CmTdm9=
+pIXYT2Zo4SBG_VKUfWTJ5C8Cu4Ya4aSQaBYBSitjRn8vlTCgjjz8HLb8LqmbvdRCUU4MFknfjeZ=
+12xWYWcrYgmSb3_Sptbk3O3McyOs_c3aeWc=3Ds0-d-e1-ft#https://cdaas.americanexpr=
+ess.com/akamai/axp/comms/icons/hl-pattern-50pc.png&#39;) center top/auto re=
+peat;background-position:center top;background-repeat:repeat;background-siz=
+e:auto;width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padd=
+ing:20px 0;padding-bottom:40px;padding-top:40px;text-align:center"><div sty=
+le=3D"margin:0px auto;max-width:620px"><table align=3D"center" border=3D"0"=
+ cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:1=
+00%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;pad=
+ding-bottom:0;padding-left:0;padding-right:0;padding-top:0;text-align:cente=
+r"><div style=3D"margin:0px auto;max-width:620px"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding=
+:20px 0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;text-=
+align:center"><div class=3D"m_8259258787063220679mj-column-per-6" style=3D"=
+font-size:0px;text-align:left;direction:ltr;display:inline-block;vertical-a=
+lign:middle;width:100%"><table border=3D"0" cellpadding=3D"0" cellspacing=
+=3D"0" role=3D"presentation" style=3D"vertical-align:middle" width=3D"100%"=
+><tbody></tbody></table></div><div class=3D"m_8259258787063220679mj-column-=
+per-10 m_8259258787063220679text-align-center" style=3D"font-size:0px;text-=
+align:left;direction:ltr;display:inline-block;vertical-align:middle;width:1=
+00%"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presen=
+tation" width=3D"100%"><tbody><tr><td style=3D"vertical-align:middle;paddin=
+g-top:0;padding-right:0;padding-bottom:0;padding-left:0"><table border=3D"0=
+" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%">=
+<tbody><tr><td align=3D"center" class=3D"m_8259258787063220679pad-3-b" styl=
+e=3D"font-size:0px;padding:10px 25px;padding-top:0;padding-right:0;padding-=
+bottom:0;padding-left:0;word-break:break-word"><table border=3D"0" cellpadd=
+ing=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"border-collapse:=
+collapse;border-spacing:0px"><tbody><tr><td style=3D"width:60px"><img alt=
+=3D"Alternate Text" src=3D"https://cdaas.americanexpress.com/akamai/axp/com=
+ms/icons/eds-library/blue-box/white-headline-icons-60px/alert-white.png" st=
+yle=3D"border:0;display:block;outline:none;text-decoration:none;height:60px=
+;width:100%;font-size:13px" width=3D"60" height=3D"60"></td></tr></tbody></=
+table></td></tr></tbody></table></td></tr></tbody></table></div><div class=
+=3D"m_8259258787063220679mj-column-per-78" style=3D"font-size:0px;text-alig=
+n:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%"=
+><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentati=
+on" width=3D"100%"><tbody><tr><td style=3D"vertical-align:middle;padding-to=
+p:0;padding-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbo=
+dy><tr><td align=3D"left" class=3D"m_8259258787063220679pad-0 m_82592587870=
+63220679pad-4-lr m_8259258787063220679body-4 m_8259258787063220679text-alig=
+n-center" style=3D"font-size:0px;padding:10px 25px;padding-top:0;padding-ri=
+ght:0;padding-bottom:0;padding-left:20px;word-break:break-word"><div style=
+=3D"font-family:&quot;Helvetica Neue&quot;,Helvetica,sans-serif;font-size:2=
+6px;font-weight:400;line-height:34px;text-align:left;color:#ffffff"><p styl=
+e=3D"margin:0 0 0 0px" role=3D"heading" aria-level=3D"1">Balance Update</p>=
+</div></td></tr></tbody></table></td></tr></tbody></table></div><div class=
+=3D"m_8259258787063220679mj-column-per-6" style=3D"font-size:0px;text-align=
+:left;direction:ltr;display:inline-block;vertical-align:middle;width:100%">=
+<table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentatio=
+n" style=3D"vertical-align:middle" width=3D"100%"><tbody></tbody></table></=
+div></td></tr></tbody></table></div></td></tr></tbody></table></div></td></=
+tr></tbody></table></div></div></td></tr></tbody></table></div></td></tr></=
+tbody></table></div><div style=3D"margin:0px auto;max-width:620px"><table a=
+lign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pr=
+esentation" style=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font=
+-size:0px;padding:20px 0;padding-bottom:10px;padding-left:40px;padding-righ=
+t:40px;padding-top:40px;text-align:center"><div class=3D"m_8259258787063220=
+679mj-column-per-100 m_8259258787063220679pad-0" style=3D"font-size:0px;tex=
+t-align:left;direction:ltr;display:inline-block;vertical-align:top;width:10=
+0%"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"present=
+ation" width=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-to=
+p:0;padding-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" ce=
+llpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbo=
+dy><tr><td align=3D"left" style=3D"font-size:0px;padding:10px 25px;padding-=
+top:0;padding-right:0;padding-bottom:0;padding-left:0;word-break:break-word=
+"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,san=
+s-serif;font-size:15px;font-weight:400;line-height:22px;text-align:left;col=
+or:#333333"><p style=3D"margin:0 0 0 0px">Dear KIRTIMAAN CHHABRA,</p><p sty=
+le=3D"margin:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">This commun=
+ication is being sent to you in accordance with the extant directions under=
+ the Reserve Bank of India (Credit Card and Debit Card =E2=80=93 Issuance a=
+nd Conduct) Directions, 2022, to inform you about the balance on your Card =
+account (including credit balance), along with recent credits and debits, a=
+nd to facilitate the refund of the available credit balance.</p></div></td>=
+</tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody></ta=
+ble></div><div style=3D"margin:0px auto;max-width:620px"><table align=3D"ce=
+nter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation=
+" style=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;=
+padding:20px 0;padding-bottom:20px;padding-left:40px;padding-right:40px;pad=
+ding-top:10px;text-align:center"><div class=3D"m_8259258787063220679pad-0 m=
+_8259258787063220679text-align-center" style=3D"margin:0px auto;max-width:5=
+40px"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D=
+"0" role=3D"presentation" style=3D"width:100%"><tbody><tr><td style=3D"dire=
+ction:ltr;font-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padd=
+ing-right:0;padding-top:0;text-align:center"><div style=3D"margin:0px auto;=
+max-width:540px"><table align=3D"center" border=3D"0" cellpadding=3D"0" cel=
+lspacing=3D"0" role=3D"presentation" style=3D"width:100%"><tbody><tr><td st=
+yle=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0;padding-=
+left:0;padding-right:0;padding-top:0;text-align:center"><div class=3D"m_825=
+9258787063220679mj-column-per-100" style=3D"font-size:0px;text-align:left;d=
+irection:ltr;display:inline-block;vertical-align:top;width:100%"><table bor=
+der=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"vertical-align:top" width=3D"100%"><tbody><tr><td align=3D"left" class=
+=3D"m_8259258787063220679text-align-left" style=3D"font-size:0px;padding:10=
+px 25px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;word-=
+break:break-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Robo=
+to,Helvetica,sans-serif;font-size:16px;font-weight:bold;line-height:24px;te=
+xt-align:left;color:#333333"><p style=3D"margin:0 0 0 0px" role=3D"heading"=
+ aria-level=3D"3">Here is the latest balance on your American Express<sup s=
+tyle=3D"line-height:0;vertical-align:super">=C2=AE</sup> Card as of 06-Jun-=
+2026</p></div></td></tr></tbody></table></div></td></tr></tbody></table></d=
+iv><div style=3D"margin:0px auto;max-width:540px"><table align=3D"center" b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding=
+:20px 0;padding-bottom:20px;padding-left:0;padding-right:0;padding-top:20px=
+;text-align:center"><div style=3D"margin:0px auto;max-width:540px"><table a=
+lign=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"pr=
+esentation" style=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font=
+-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-right:0;pa=
+dding-top:0;text-align:center"><div style=3D"margin:0px auto;max-width:540p=
+x"><table align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" style=3D"width:100%"><tbody><tr><td style=3D"border-=
+bottom:1px solid #c8c9c7;border-top:1px solid #c8c9c7;direction:ltr;font-si=
+ze:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-right:0;paddi=
+ng-top:0;text-align:center"><div class=3D"m_8259258787063220679mj-column-pe=
+r-50" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline-b=
+lock;vertical-align:top;width:100%"><table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td style=
+=3D"vertical-align:top;padding-top:0;padding-right:0;padding-bottom:0;paddi=
+ng-left:0"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"=
+presentation" width=3D"100%"><tbody><tr><td align=3D"left" class=3D"m_82592=
+58787063220679pad-0 m_8259258787063220679text-align-center m_82592587870632=
+20679pad-2-t" style=3D"font-size:0px;padding:10px 25px;padding-top:20px;pad=
+ding-right:40px;padding-bottom:20px;padding-left:60px;word-break:break-word=
+"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,san=
+s-serif;font-size:15px;font-weight:bold;line-height:22px;text-align:left;co=
+lor:#006fcf"><p style=3D"margin:0 0 0 0px">Last statement balance</p></div>=
+</td></tr></tbody></table></td></tr></tbody></table></div><div class=3D"m_8=
+259258787063220679mj-column-per-50" style=3D"font-size:0px;text-align:left;=
+direction:ltr;display:inline-block;vertical-align:top;width:100%"><table bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=
+=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;padding-=
+right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td a=
+lign=3D"left" class=3D"m_8259258787063220679pad-0 m_8259258787063220679text=
+-align-center" style=3D"font-size:0px;padding:10px 25px;padding-top:10px;pa=
+dding-right:60px;padding-bottom:10px;padding-left:40px;word-break:break-wor=
+d"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,sa=
+ns-serif;font-size:15px;font-weight:bold;line-height:22px;text-align:left;c=
+olor:#333333"><p style=3D"margin:0 0 0 0px">INR xx, xxx.00</p></div></td></=
+tr><tr><td align=3D"left" class=3D"m_8259258787063220679pad-0 m_82592587870=
+63220679pad-2-b m_8259258787063220679text-align-center" style=3D"font-size:=
+0px;padding:10px 25px;padding-top:0;padding-right:60px;padding-bottom:10px;=
+padding-left:40px;word-break:break-word"><div style=3D"font-family:&quot;He=
+lvetica Neue&quot;,Roboto,Helvetica,sans-serif;font-size:13px;font-weight:4=
+00;line-height:20px;text-align:left;color:#53565a"><p style=3D"margin:0 0 0=
+ 0px">closing date 02-Jun-2026</p></div></td></tr></tbody></table></td></tr=
+></tbody></table></div></td></tr></tbody></table></div><div style=3D"margin=
+:0px auto;max-width:540px"><table align=3D"center" border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%"><tbody>=
+<tr><td style=3D"border-bottom:1px solid #c8c9c7;border-top:0px;direction:l=
+tr;font-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-rig=
+ht:0;padding-top:0;text-align:center"><div class=3D"m_8259258787063220679mj=
+-column-per-50" style=3D"font-size:0px;text-align:left;direction:ltr;displa=
+y:inline-block;vertical-align:top;width:100%"><table border=3D"0" cellpaddi=
+ng=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr>=
+<td style=3D"vertical-align:top;padding-top:0;padding-right:0;padding-botto=
+m:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0"=
+ role=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"left" class=
+=3D"m_8259258787063220679pad-0 m_8259258787063220679text-align-center m_825=
+9258787063220679pad-2-t" style=3D"font-size:0px;padding:10px 25px;padding-t=
+op:20px;padding-right:40px;padding-bottom:20px;padding-left:60px;word-break=
+:break-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,He=
+lvetica,sans-serif;font-size:15px;font-weight:bold;line-height:22px;text-al=
+ign:left;color:#006fcf"><p style=3D"margin:0 0 0 0px">Recent credits</p></d=
+iv></td></tr></tbody></table></td></tr></tbody></table></div><div class=3D"=
+m_8259258787063220679mj-column-per-50" style=3D"font-size:0px;text-align:le=
+ft;direction:ltr;display:inline-block;vertical-align:top;width:100%"><table=
+ border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" wid=
+th=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;paddin=
+g-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d align=3D"left" class=3D"m_8259258787063220679pad-0 m_8259258787063220679t=
+ext-align-center" style=3D"font-size:0px;padding:10px 25px;padding-top:10px=
+;padding-right:60px;padding-bottom:10px;padding-left:40px;word-break:break-=
+word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica=
+,sans-serif;font-size:15px;font-weight:bold;line-height:22px;text-align:lef=
+t;color:#333333"><p style=3D"margin:0 0 0 0px">INR xx, xxx.00</p></div></td=
+></tr><tr><td align=3D"left" class=3D"m_8259258787063220679pad-0 m_82592587=
+87063220679pad-2-b m_8259258787063220679text-align-center" style=3D"font-si=
+ze:0px;padding:10px 25px;padding-top:0;padding-right:60px;padding-bottom:10=
+px;padding-left:40px;word-break:break-word"><div style=3D"font-family:&quot=
+;Helvetica Neue&quot;,Roboto,Helvetica,sans-serif;font-size:13px;font-weigh=
+t:400;line-height:20px;text-align:left;color:#53565a"><p style=3D"margin:0 =
+0 0 0px">since 03-Jun-2026</p></div></td></tr></tbody></table></td></tr></t=
+body></table></div></td></tr></tbody></table></div><div style=3D"margin:0px=
+ auto;max-width:540px"><table align=3D"center" border=3D"0" cellpadding=3D"=
+0" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%"><tbody><tr>=
+<td style=3D"border-bottom:1px solid #c8c9c7;border-top:0px;direction:ltr;f=
+ont-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-right:0=
+;padding-top:0;text-align:center"><div class=3D"m_8259258787063220679mj-col=
+umn-per-50" style=3D"font-size:0px;text-align:left;direction:ltr;display:in=
+line-block;vertical-align:top;width:100%"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d style=3D"vertical-align:top;padding-top:0;padding-right:0;padding-bottom:=
+0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" r=
+ole=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"left" class=3D"=
+m_8259258787063220679pad-0 m_8259258787063220679text-align-center m_8259258=
+787063220679pad-2-t" style=3D"font-size:0px;padding:10px 25px;padding-top:2=
+0px;padding-right:40px;padding-bottom:20px;padding-left:60px;word-break:bre=
+ak-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvet=
+ica,sans-serif;font-size:15px;font-weight:bold;line-height:22px;text-align:=
+left;color:#006fcf"><p style=3D"margin:0 0 0 0px">Recent debits</p></div></=
+td></tr></tbody></table></td></tr></tbody></table></div><div class=3D"m_825=
+9258787063220679mj-column-per-50" style=3D"font-size:0px;text-align:left;di=
+rection:ltr;display:inline-block;vertical-align:top;width:100%"><table bord=
+er=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D=
+"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;padding-rig=
+ht:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D"0"=
+ cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td alig=
+n=3D"left" class=3D"m_8259258787063220679pad-0 m_8259258787063220679text-al=
+ign-center" style=3D"font-size:0px;padding:10px 25px;padding-top:10px;paddi=
+ng-right:60px;padding-bottom:10px;padding-left:40px;word-break:break-word">=
+<div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,sans-=
+serif;font-size:15px;font-weight:bold;line-height:22px;text-align:left;colo=
+r:#333333"><p style=3D"margin:0 0 0 0px">INR 0.00</p></div></td></tr><tr><t=
+d align=3D"left" class=3D"m_8259258787063220679pad-0 m_8259258787063220679p=
+ad-2-b m_8259258787063220679text-align-center" style=3D"font-size:0px;paddi=
+ng:10px 25px;padding-top:0;padding-right:60px;padding-bottom:10px;padding-l=
+eft:40px;word-break:break-word"><div style=3D"font-family:&quot;Helvetica N=
+eue&quot;,Roboto,Helvetica,sans-serif;font-size:13px;font-weight:400;line-h=
+eight:20px;text-align:left;color:#53565a"><p style=3D"margin:0 0 0 0px">sin=
+ce 03-Jun-2026</p></div></td></tr></tbody></table></td></tr></tbody></table=
+></div></td></tr></tbody></table></div><div style=3D"background:#ecedee;bac=
+kground-color:#ecedee;margin:0px auto;max-width:540px"><table align=3D"cent=
+er" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" =
+style=3D"background:#ecedee;background-color:#ecedee;width:100%"><tbody><tr=
+><td style=3D"border-bottom:1px solid #c8c9c7;border-top:0px;direction:ltr;=
+font-size:0px;padding:20px 0;padding-bottom:0;padding-left:0;padding-right:=
+0;padding-top:0;text-align:center"><div class=3D"m_8259258787063220679mj-co=
+lumn-per-50" style=3D"font-size:0px;text-align:left;direction:ltr;display:i=
+nline-block;vertical-align:top;width:100%"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d style=3D"vertical-align:top;padding-top:0;padding-right:0;padding-bottom:=
+0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" r=
+ole=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"left" class=3D"=
+m_8259258787063220679pad-0 m_8259258787063220679text-align-center m_8259258=
+787063220679pad-2-t" style=3D"font-size:0px;padding:10px 25px;padding-top:2=
+0px;padding-right:40px;padding-bottom:20px;padding-left:60px;word-break:bre=
+ak-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvet=
+ica,sans-serif;font-size:15px;font-weight:bold;line-height:22px;text-align:=
+left;color:#00175a"><p style=3D"margin:0 0 0 0px">Current balance*</p></div=
+></td></tr></tbody></table></td></tr></tbody></table></div><div class=3D"m_=
+8259258787063220679mj-column-per-50" style=3D"font-size:0px;text-align:left=
+;direction:ltr;display:inline-block;vertical-align:top;width:100%"><table b=
+order=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=
+=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;padding-=
+right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D=
+"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td a=
+lign=3D"left" class=3D"m_8259258787063220679pad-0 m_8259258787063220679pad-=
+2-b m_8259258787063220679text-align-center" style=3D"font-size:0px;padding:=
+10px 25px;padding-top:20px;padding-right:60px;padding-bottom:20px;padding-l=
+eft:40px;word-break:break-word"><div style=3D"font-family:&quot;Helvetica N=
+eue&quot;,Roboto,Helvetica,sans-serif;font-size:15px;font-weight:bold;line-=
+height:22px;text-align:left;color:#00175a"><p style=3D"margin:0 0 0 0px">IN=
+R 0.00</p></div></td></tr></tbody></table></td></tr></tbody></table></div><=
+/td></tr></tbody></table></div></td></tr></tbody></table></div></td></tr></=
+tbody></table></div></td></tr></tbody></table></div></td></tr></tbody></tab=
+le></div><div style=3D"margin:0px auto;max-width:620px"><table align=3D"cen=
+ter" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+ style=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;p=
+adding:20px 0;padding-bottom:40px;padding-left:40px;padding-right:40px;padd=
+ing-top:10px;text-align:center"><div class=3D"m_8259258787063220679mj-colum=
+n-per-100 m_8259258787063220679pad-0" style=3D"font-size:0px;text-align:lef=
+t;direction:ltr;display:inline-block;vertical-align:top;width:100%"><table =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" widt=
+h=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;padding=
+-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d style=3D"font-size:0px;padding:20px 0;padding-top:0;padding-right:0;paddi=
+ng-bottom:0;padding-left:0;word-break:break-word"><div style=3D"margin:0px =
+auto;max-width:540px"><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"width:100%"><tbody><tr><=
+td style=3D"direction:ltr;font-size:0px;padding:20px 0;padding-bottom:0;pad=
+ding-left:0;padding-right:0;padding-top:0;text-align:center"><div class=3D"=
+m_8259258787063220679mj-column-per-100" style=3D"font-size:0px;text-align:l=
+eft;direction:ltr;display:inline-block;vertical-align:top;width:100%"><tabl=
+e border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" wi=
+dth=3D"100%"><tbody><tr><td style=3D"vertical-align:top;padding-top:0;paddi=
+ng-right:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=
+=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><t=
+d align=3D"center" class=3D"m_8259258787063220679pad-0 m_825925878706322067=
+9pad-0-d m_8259258787063220679text-align-center" style=3D"font-size:0px;pad=
+ding:10px 25px;padding-top:13px;padding-right:0;padding-bottom:0;padding-le=
+ft:0;word-break:break-word"><table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" style=3D"border-collapse:separate;width:230p=
+x;line-height:100%"><tbody><tr><td align=3D"center" bgcolor=3D"#00175a" rol=
+e=3D"presentation" style=3D"border:1px solid #00175a;border-radius:5px;back=
+ground:#00175a" valign=3D"middle"><a href=3D"https://go.amex/view_your_rece=
+nt_activity_en_in?comm_track_id=3Dmhywgd2e&amp;dotAmexDomain=3Dgo" style=3D=
+"display:inline-block;width:178px;background:#00175a;color:#ffffff;font-fam=
+ily:Helvetica,Arial,Roboto,sans-serif;font-size:15px;font-weight:400;line-h=
+eight:22px;margin:0;text-decoration:none;text-transform:none;padding:8px 25=
+px;border-radius:5px" target=3D"_blank" rel=3D"noreferrer">View activity</a=
+></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></ta=
+ble></div></td></tr></tbody></table></div></td></tr></tbody></table></td></=
+tr></tbody></table></div></td></tr></tbody></table></div><div style=3D"back=
+ground:#f7f8f9;background-color:#f7f8f9;margin:0px auto;max-width:620px"><t=
+able align=3D"center" border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=
+=3D"presentation" style=3D"background:#f7f8f9;background-color:#f7f8f9;widt=
+h:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding:20px 0;=
+padding-bottom:40px;padding-left:40px;padding-right:40px;padding-top:40px;t=
+ext-align:center"><div class=3D"m_8259258787063220679mj-column-per-100 m_82=
+59258787063220679pad-0" style=3D"font-size:0px;text-align:left;direction:lt=
+r;display:inline-block;vertical-align:top;width:100%"><table border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tb=
+ody><tr><td style=3D"vertical-align:top;padding-top:0;padding-right:0;paddi=
+ng-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"left"=
+ style=3D"font-size:0px;padding:10px 25px;padding-top:0;padding-right:0;pad=
+ding-bottom:0;padding-left:0;word-break:break-word"><div style=3D"font-fami=
+ly:&quot;Helvetica Neue&quot;,Roboto,Helvetica,sans-serif;font-size:15px;fo=
+nt-weight:400;line-height:22px;text-align:left;color:#333333"><p style=3D"m=
+argin:0 0 0 0px"><strong>What would you like to do?</strong></p><p style=3D=
+"margin:0 0 0 0px">=C2=A0</p><ul style=3D"margin:0;padding:0;text-align:lef=
+t;list-style-type:disc"><li style=3D"margin:0 0 0 30px;text-align:left"><st=
+rong><a href=3D"https://www.americanexpress.com/en-in/services/pay-your-bil=
+l/billdesk/" style=3D"color:#006fcf" target=3D"_blank" rel=3D"noreferrer">P=
+ay your bill online</a></strong></li><li style=3D"margin:0 0 0 30px;text-al=
+ign:left"><strong><a href=3D"https://www.americanexpress.com/Tracking?mid=
+=3DHEALT030202508100607560963005356&amp;msrc=3D1001&amp;url=3Dhttps%3A%2F%2=
+Fglobal.americanexpress.com%2Fmyca%2Fintl%2Festatement%2Fjapa%2Fstatement.d=
+o%3Frequest_type%3D%26Face%3Den_IN%26BPIndex%3D0%26sorted_index%3D0" style=
+=3D"color:#006fcf" target=3D"_blank" rel=3D"noreferrer">View your recent ac=
+tivity</a></strong></li><li style=3D"margin:0 0 0 30px;text-align:left"><st=
+rong><a href=3D"https://iforms.americanexpress.com/iFormsSecure/auth_reg/en=
+_IN/iforms.do?cuid=3DCreditBalanceRefund_en_IN&amp;evtsrc=3Dlink&amp;evttyp=
+e=3D0" style=3D"color:#006fcf" target=3D"_blank" rel=3D"noreferrer">Request=
+ a refund </a></strong>(in case of a credit balance)</li><li style=3D"margi=
+n:0 0 0 30px;text-align:left"><strong><a href=3D"https://www.americanexpres=
+s.com/Tracking?mid=3DHEALT030202508100607560963005356&amp;msrc=3D1001&amp;u=
+rl=3Dhttps%3A%2F%2Fwww.americanexpress.com%2Fin%2Fcustomer-service%2Fpaymen=
+ts-statements-and-balance%2Fmaking-a-payment.html" style=3D"color:#006fcf" =
+target=3D"_blank" rel=3D"noreferrer">Make a payment </a></strong>(in case o=
+f an outstanding balance)</li><li style=3D"margin:0 0 0 30px;text-align:lef=
+t"><strong><a href=3D"https://www.americanexpress.com/en-us/account/login?D=
+estPage=3Dhttps%3A%2F%2Fglobal.americanexpress.com%2Fdashboard%3Finav%3Den_=
+in_menu_my_account_top_links_view_my_account%26COUNTRY_CODE%3DIN%26COUNTRY_=
+CODE%3DIN" style=3D"color:#006fcf" target=3D"_blank" rel=3D"noreferrer">Vie=
+w your Statement</a></strong></li><li style=3D"margin:0 0 0 30px;text-align=
+:left"><strong><a href=3D"https://www.americanexpress.com/Tracking?mid=3DHE=
+ALT030202508100607560963005356&amp;msrc=3D1001&amp;url=3Dhttp%3A%2F%2Fwww.a=
+mericanexpress.co.in%2Falerts" style=3D"color:#006fcf" target=3D"_blank" re=
+l=3D"noreferrer">Update your Card Alert settings</a></strong></li></ul><p s=
+tyle=3D"margin:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">Thank you=
+ for your Cardmembership.</p><p style=3D"margin:0 0 0 0px">=C2=A0</p></div>=
+</td></tr></tbody></table></td></tr></tbody></table></div></td></tr></tbody=
+></table></div><div style=3D"background:#00175a;background-color:#00175a;ma=
+rgin:0px auto;max-width:620px"><table align=3D"center" border=3D"0" cellpad=
+ding=3D"0" cellspacing=3D"0" role=3D"presentation" style=3D"background:#001=
+75a;background-color:#00175a;width:100%"><tbody><tr><td style=3D"direction:=
+ltr;font-size:0px;padding:20px 0;padding-bottom:20px;padding-left:0;padding=
+-right:0;padding-top:20px;text-align:center"><div class=3D"m_82592587870632=
+20679mj-column-per-100" style=3D"font-size:0px;text-align:left;direction:lt=
+r;display:inline-block;vertical-align:top;width:100%"><table border=3D"0" c=
+ellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tb=
+ody><tr><td style=3D"vertical-align:top;padding-top:0;padding-right:0;paddi=
+ng-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspaci=
+ng=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"cente=
+r" class=3D"m_8259258787063220679dls-tagline-blue-sm" style=3D"font-size:0p=
+x;padding:10px 25px;padding-top:0;padding-right:0;padding-bottom:0;padding-=
+left:0;word-break:break-word"><table border=3D"0" cellpadding=3D"0" cellspa=
+cing=3D"0" role=3D"presentation" style=3D"border-collapse:collapse;border-s=
+pacing:0px"><tbody><tr><td style=3D"width:240px"><img alt=3D"Don&#39;t live=
+ life without it" src=3D"https://cdaas.americanexpress.com/akamai/axp/comms=
+/taglines/consumer-tagline-english.png" style=3D"color:#fff;border:0;displa=
+y:block;outline:none;text-decoration:none;height:auto;width:100%;font-size:=
+13px" width=3D"240" height=3D"auto"></td></tr></tbody></table></td></tr></t=
+body></table></td></tr></tbody></table></div></td></tr></tbody></table></di=
+v><div style=3D"margin:0px auto;max-width:620px"><table align=3D"center" bo=
+rder=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" style=
+=3D"width:100%"><tbody><tr><td style=3D"direction:ltr;font-size:0px;padding=
+:20px 0;padding-bottom:0;padding-left:0;padding-right:0;padding-top:0;text-=
+align:center" role=3D"list"><div class=3D"m_8259258787063220679mj-column-pe=
+r-33 m_8259258787063220679text-align-center m_8259258787063220679nav-bar-bo=
+rder-b" style=3D"font-size:0px;text-align:left;direction:ltr;display:inline=
+-block;vertical-align:middle;width:100%" role=3D"listitem"><table border=3D=
+"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%=
+"><tbody><tr><td style=3D"vertical-align:middle;padding-top:0;padding-right=
+:0;padding-bottom:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" c=
+ellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><td align=
+=3D"center" class=3D"m_8259258787063220679pad-4-lr m_8259258787063220679pad=
+-2-tb m_8259258787063220679text-align-center" style=3D"font-size:0px;paddin=
+g:10px 25px;padding-top:20px;padding-right:20px;padding-bottom:20px;padding=
+-left:40px;word-break:break-word"><div style=3D"font-family:Helvetica,Arial=
+,Roboto,sans-serif;font-size:15px;font-weight:400;line-height:22px;text-ali=
+gn:center;color:#000000"><a href=3D"https://www.americanexpress.com/en-in/c=
+ompany/legal/privacy-center/online-privacy-statement/" style=3D"padding-top=
+:20px;padding-bottom:20px;padding-left:0;padding-right:0;color:#006fcf;text=
+-decoration:none" target=3D"_blank" rel=3D"noreferrer">Privacy statement</a=
+></div></td></tr></tbody></table></td></tr></tbody></table></div><div class=
+=3D"m_8259258787063220679mj-column-per-33 m_8259258787063220679text-align-c=
+enter m_8259258787063220679nav-bar-border-b" style=3D"font-size:0px;text-al=
+ign:left;direction:ltr;display:inline-block;vertical-align:middle;width:100=
+%" role=3D"listitem"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0=
+" role=3D"presentation" width=3D"100%"><tbody><tr><td style=3D"vertical-ali=
+gn:middle;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><t=
+able border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation"=
+ width=3D"100%"><tbody><tr><td align=3D"center" class=3D"m_8259258787063220=
+679pad-4-lr m_8259258787063220679pad-2-tb m_8259258787063220679text-align-c=
+enter" style=3D"font-size:0px;padding:10px 25px;padding-top:20px;padding-ri=
+ght:20px;padding-bottom:20px;padding-left:20px;word-break:break-word"><div =
+style=3D"font-family:Helvetica,Arial,Roboto,sans-serif;font-size:15px;font-=
+weight:400;line-height:22px;text-align:center;color:#000000"><a href=3D"htt=
+ps://www.americanexpress.com/in/support/contact-us.html" style=3D"padding-t=
+op:20px;padding-bottom:20px;padding-left:0;padding-right:0;color:#006fcf;te=
+xt-decoration:none" target=3D"_blank" rel=3D"noreferrer">Contact us</a></di=
+v></td></tr></tbody></table></td></tr></tbody></table></div><div class=3D"m=
+_8259258787063220679mj-column-per-34 m_8259258787063220679text-align-center=
+ m_8259258787063220679nav-bar-border-b" style=3D"font-size:0px;text-align:l=
+eft;direction:ltr;display:inline-block;vertical-align:middle;width:100%" ro=
+le=3D"listitem"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" rol=
+e=3D"presentation" width=3D"100%"><tbody><tr><td style=3D"vertical-align:mi=
+ddle;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><table =
+border=3D"0" cellpadding=3D"0" cellspacing=3D"0" role=3D"presentation" widt=
+h=3D"100%"><tbody><tr><td align=3D"center" class=3D"m_8259258787063220679pa=
+d-4-lr m_8259258787063220679pad-2-tb m_8259258787063220679text-align-center=
+" style=3D"font-size:0px;padding:10px 25px;padding-top:20px;padding-right:2=
+0px;padding-bottom:20px;padding-left:20px;word-break:break-word"><div style=
+=3D"font-family:Helvetica,Arial,Roboto,sans-serif;font-size:15px;font-weigh=
+t:400;line-height:22px;text-align:center;color:#000000"><a href=3D"https://=
+www.americanexpress.com/en-in/account/login?DestPage=3Dhttps%3A%2F%2Fglobal=
+.americanexpress.com%2Femail" style=3D"padding-top:20px;padding-bottom:20px=
+;padding-left:0;padding-right:0;color:#006fcf;text-decoration:none" target=
+=3D"_blank" rel=3D"noreferrer">Update your email address</a></div></td></tr=
+></tbody></table></td></tr></tbody></table></div></td></tr></tbody></table>=
+</div><div style=3D"background:#d9d9d6;background-color:#d9d9d6;margin:0px =
+auto;max-width:620px"><table align=3D"center" border=3D"0" cellpadding=3D"0=
+" cellspacing=3D"0" role=3D"presentation" style=3D"background:#d9d9d6;backg=
+round-color:#d9d9d6;width:100%"><tbody><tr><td style=3D"direction:ltr;font-=
+size:0px;padding:20px 0;padding-bottom:10px;padding-left:0;padding-right:0;=
+padding-top:10px;text-align:center"><div class=3D"m_8259258787063220679mj-c=
+olumn-per-100" style=3D"font-size:0px;text-align:left;direction:ltr;display=
+:inline-block;vertical-align:top;width:100%"><table border=3D"0" cellpaddin=
+g=3D"0" cellspacing=3D"0" role=3D"presentation" width=3D"100%"><tbody><tr><=
+td style=3D"vertical-align:top;padding-top:0;padding-right:0;padding-bottom=
+:0;padding-left:0"><table border=3D"0" cellpadding=3D"0" cellspacing=3D"0" =
+role=3D"presentation" width=3D"100%"><tbody><tr><td align=3D"left" style=3D=
+"font-size:0px;padding:10px 25px;padding-top:0;padding-right:0;padding-bott=
+om:10px;padding-left:0;word-break:break-word"><div style=3D"font-family:&qu=
+ot;Helvetica Neue&quot;,Roboto,Helvetica,sans-serif;font-size:13px;font-wei=
+ght:400;line-height:20px;text-align:left;color:#53565a"><p style=3D"margin:=
+0 0 0 0px">We are unable to accept incoming emails to this address. In case=
+ you have any questions, please feel free to call American Express at the n=
+umber listed on the back of your Card or alternatively you can write to us:=
+</p><p style=3D"margin:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">A=
+merican Express Banking Corp.</p><p style=3D"margin:0 0 0 0px">Cyber City, =
+Tower - C, Bldg. No 8, Sector 25</p><p style=3D"margin:0 0 0 0px">DLF City =
+Ph II, Gurgaon - 122002</p><p style=3D"margin:0 0 0 0px">=C2=A0</p><p style=
+=3D"margin:0 0 0 0px">Thank you for using American Express Online Services.=
+</p><p style=3D"margin:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">F=
+or details on our email practices, view our <a href=3D"https://go.amex/priv=
+acy-in?comm_track_id=3Dmhywgd2e&amp;dotAmexDomain=3Dgo" style=3D"color:#535=
+65a;font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,sans-serif;font=
+-size:13px;font-weight:400;line-height:20px;text-decoration:underline" targ=
+et=3D"_blank" rel=3D"noreferrer">Privacy Statement</a>.</p><p style=3D"marg=
+in:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">American Express Bank=
+ing Corp.,</p><p style=3D"margin:0 0 0 0px">Incorporated in the U.S.A.</p><=
+p style=3D"margin:0 0 0 0px">=C2=A0</p><p style=3D"margin:0 0 0 0px">=C2=AE=
+ Registered Trademark of American Express Company.</p><p style=3D"margin:0 =
+0 0 0px"></p><p style=3D"margin:0 0 0 0px">Copyright 2025 American Express =
+Company. All Rights Reserved.</p><p style=3D"margin:0 0 0 0px"></p></div></=
+td></tr><tr><td align=3D"left" style=3D"font-size:0px;padding:10px 25px;pad=
+ding-top:0;padding-right:0;padding-bottom:0;padding-left:0;word-break:break=
+-word"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetic=
+a,sans-serif;font-size:13px;font-weight:400;line-height:20px;text-align:lef=
+t;color:#53565a"><p style=3D"margin:0 0 0 0px">SAM0FYI005</p></div></td></t=
+r><tr><td align=3D"left" style=3D"font-size:0px;padding:10px 25px;padding-t=
+op:10px;padding-right:0;padding-bottom:0;padding-left:0;word-break:break-wo=
+rd"><div style=3D"font-family:&quot;Helvetica Neue&quot;,Roboto,Helvetica,s=
+ans-serif;font-size:13px;font-weight:400;line-height:20px;text-align:left;c=
+olor:#53565a"></div></td></tr><tr><td align=3D"left" style=3D"font-size:0px=
+;padding:10px 25px;padding-top:0;padding-right:0;padding-bottom:0;padding-l=
+eft:0;word-break:break-word"><div style=3D"font-family:Ubuntu,Helvetica,Ari=
+al,sans-serif;font-size:13px;line-height:1;text-align:left;color:#000000;he=
+ight:1px"><img height=3D"1" width=3D"1" role=3D"none" alt=3D"" style=3D"hei=
+ght:1px;width:1px" src=3D"https://m.amex/opentrack?comm_track_id=3Dr_BALUPD=
+202606062281993646827_1_x&amp;dotAmexDomain=3Dm"></div></td></tr></tbody></=
+table></td></tr></tbody></table></div></td></tr></tbody></table></div></td>=
+</tr></tbody></table></div></div></div>
+
+</div></div></div>
+
+--000000000000eefbc0065483f58e--

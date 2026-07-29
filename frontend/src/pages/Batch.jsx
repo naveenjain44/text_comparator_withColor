@@ -77,8 +77,8 @@ export default function BatchPage() {
 
       <div className="px-8 py-6 space-y-6" data-testid="batch-page">
         <UploadZone
-          label="Files (.docx / .eml / .msg / .zip) — pairs auto-matched by filename"
-          accept=".docx,.eml,.msg,.zip"
+          label="Files (.docx / .eml / .msg / .pdf / .html / .txt / .pptx / .xlsx / .csv / .zip) — pairs auto-matched by filename"
+          accept=".docx,.eml,.msg,.pdf,.htm,.html,.txt,.pptx,.xlsx,.csv,.zip"
           multiple
           onFiles={(fs) => setFiles((prev) => [...prev, ...fs])}
           testid="upload-batch"
